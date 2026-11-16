@@ -5,6 +5,17 @@ import imgSurf from '../assets/main/style-surfskate.jpg'
 import imgCarving from '../assets/main/style-carving.jpg'
 import imgSidewinder from '../assets/main/style-sidewinder.jpg'
 import imgCruiser from '../assets/main/style-cruiser.jpg'
+// 바퀴·용품 제품 사진 (docs/assets)
+import imgSolidWheels from '../assets/products/solid-wheels.jpg'
+import imgClearWheels from '../assets/products/clear-wheels.jpg'
+import imgGraphicWheels from '../assets/products/side-graphic-wheels.jpg'
+import imgWideWheels from '../assets/products/wide-wheels.jpg'
+import imgHelmet from '../assets/products/helmet.jpg'
+import imgPads from '../assets/products/gear-set.jpg'
+import imgTool from '../assets/products/t-tool.jpg'
+import imgBearings from '../assets/products/bearings.jpg'
+import imgGrip from '../assets/products/grip-tape.jpg'
+import imgBag from '../assets/products/carry-bag.jpg'
 
 // 타는 스타일 (P01 S01-2, P02 S02-2)
 // bias·why: 확인용 예시 추천 규칙 (site/js/app.js 1차 구현과 같음, 추천 규칙은 [미정])
@@ -151,10 +162,10 @@ export const EMOJIS = ['🔥', '⭐', '💙', '🌊', '🛹', '😎', '🌈', '�
 
 // 바퀴 종류 (P02 바퀴 탭)
 export const WHEEL_TYPES = [
-  { id: 'solid', name: '솔리드', note: '기본', desc: '한 가지 색으로 꽉 찬 기본 바퀴예요.', price: 0 },
-  { id: 'clear', name: '클리어', note: '반투명', desc: '속이 살짝 비치는 반투명 바퀴예요.', price: 8000 },
-  { id: 'graphic', name: '사이드 그래픽', note: '커스텀 인쇄', desc: '바퀴 옆면에 원하는 그래픽을 직접 넣을 수 있어요.', price: 20000 },
-  { id: 'wide', name: '와이드', note: '광폭 바퀴', desc: '폭이 넓어 더 안정적인 바퀴예요.', price: 10000 },
+  { id: 'solid', name: '솔리드', note: '기본', desc: '한 가지 색으로 꽉 찬 기본 바퀴예요.', price: 0, img: imgSolidWheels },
+  { id: 'clear', name: '클리어', note: '반투명', desc: '속이 살짝 비치는 반투명 바퀴예요.', price: 8000, img: imgClearWheels },
+  { id: 'graphic', name: '사이드 그래픽', note: '커스텀 인쇄', desc: '바퀴 옆면에 원하는 그래픽을 직접 넣을 수 있어요.', price: 20000, img: imgGraphicWheels },
+  { id: 'wide', name: '와이드', note: '광폭 바퀴', desc: '폭이 넓어 더 안정적인 바퀴예요.', price: 10000, img: imgWideWheels },
 ]
 
 // 디자인 추가 금액 — 무늬·그림·사진 선택에 따라 자동으로 붙음
@@ -173,10 +184,10 @@ export const DECK_OPTIONS = [
 
 // 그 외 추가 상품
 export const EXTRAS = [
-  { id: 'helmet', name: '헬멧', desc: '머리를 보호하는 기본 안전 장비예요.', price: 22000 },
-  { id: 'pads', name: '보호대 세트', desc: '손목·팔꿈치·무릎을 함께 보호해요.', price: 15000 },
-  { id: 'tool', name: '스케이트 T툴', desc: '트럭과 바퀴 나사를 조이고 풀 때 써요.', price: 5000 },
-  { id: 'bearing', name: '베어링 세트', desc: '바퀴를 부드럽게 굴려 주는 교체용 8개입이에요.', price: 20000 },
-  { id: 'grip', name: '그립테이프', desc: '덱 윗면에 붙이는 여분·교체용 미끄럼 방지 테이프예요.', price: 6000 },
-  { id: 'bag', name: '보드 가방', desc: '보드를 넣고 메고 다니기 편해요.', price: 18000 },
+  { id: 'helmet', name: '헬멧', desc: '머리를 보호하는 기본 안전 장비예요.', price: 22000, img: imgHelmet },
+  { id: 'pads', name: '보호대 세트', desc: '손목·팔꿈치·무릎을 함께 보호해요.', price: 15000, img: imgPads },
+  { id: 'tool', name: '스케이트 T툴', desc: '트럭과 바퀴 나사를 조이고 풀 때 써요.', price: 5000, img: imgTool },
+  { id: 'bearing', name: '베어링 세트', desc: '바퀴를 부드럽게 굴려 주는 교체용 8개입이에요.', price: 20000, img: imgBearings },
+  { id: 'grip', name: '그립테이프', desc: '덱 윗면에 붙이는 여분·교체용 미끄럼 방지 테이프예요.', price: 6000, img: imgGrip },
+  { id: 'bag', name: '보드 가방', desc: '보드를 넣고 메고 다니기 편해요.', price: 18000, img: imgBag },
 ]

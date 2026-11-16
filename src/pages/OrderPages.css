@@ -329,3 +329,104 @@
 .login__cta {
   margin-top: 36px;
 }
+
+/* P04 결제 수단 */
+.pay-methods {
+  margin-top: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pay-method {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 22px;
+  border: var(--border-line) solid var(--line-soft);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.pay-method.is-on {
+  border: var(--border-action) solid var(--ink);
+  font-weight: 700;
+}
+
+.pay-method__dot {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+}
+
+.pay-method.is-on .pay-method__dot {
+  border-width: 6px;
+}
+
+.pay-fields {
+  display: grid;
+  gap: 16px;
+}
+
+.pay-fields--card {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.pay-fields--transfer {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* P04 › S04-4 결제 완료 내역 */
+.paid-box {
+  margin: 8px 0 0;
+  width: 100%;
+  max-width: 420px;
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  background: var(--ground);
+  text-align: left;
+}
+
+.paid-box div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 6px 0;
+  font-size: 15px;
+}
+
+.paid-box dt {
+  color: var(--text-muted);
+}
+
+.paid-box dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+@media (max-width: 599px) {
+  .pay-fields--card,
+  .pay-fields--transfer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pay-method {
+    flex: 1 1 0;
+    justify-content: center;
+    padding: 0 12px;
+  }
+}
+
+.pay-box {
+  margin-top: 32px;
+}
+
+.pay-box > * + * {
+  margin-top: 20px;
+}

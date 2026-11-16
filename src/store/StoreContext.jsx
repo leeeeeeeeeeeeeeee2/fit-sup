@@ -10,8 +10,11 @@ const INITIAL = {
   cart: [],
   designs: [],
   loggedIn: false,
-  pending: null, // 로그인하러 가기 전에 하던 일: 'save' | 'image'
+  pending: null, // 로그인하러 가기 전에 하던 일: 'save' | 'image' | 'cart' | 'review'
   lastOrderCount: 0,
+  lastOrder: null, // { count, total, payLabel }
+  myReviews: [], // 내가 쓴 리뷰
+  helped: [], // 도움돼요를 누른 리뷰 id
 }
 
 function load() {
@@ -68,7 +71,14 @@ export function StoreProvider({ children }) {
       addToCart: (design) =>
         setState((s) => ({ ...s, cart: [...s.cart, { id: newId(), design: { ...design } }] })),
       removeFromCart: (id) => setState((s) => ({ ...s, cart: s.cart.filter((it) => it.id !== id) })),
-      completeOrder: () => setState((s) => ({ ...s, lastOrderCount: s.cart.length, cart: [] })),
+      completeOrder: (order) =>
+        setState((s) => ({ ...s, lastOrderCount: s.cart.length, lastOrder: order ?? null, cart: [] })),
+      addReview: (review) => setState((s) => ({ ...s, myReviews: [{ id: newId(), ...review }, ...s.myReviews] })),
+      toggleHelped: (id) =>
+        setState((s) => ({
+          ...s,
+          helped: s.helped.includes(id) ? s.helped.filter((x) => x !== id) : [...s.helped, id],
+        })),
       saveDesign: (design) =>
         setState((s) => ({ ...s, designs: [...s.designs, { id: newId(), design: { ...design } }] })),
       login: () => setState((s) => ({ ...s, loggedIn: true })),

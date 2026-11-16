@@ -1,63 +1,8 @@
-import { useId, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { COLORS, EXTRAS, WHEEL_TYPES } from '../data/options.js'
 import { HEX_RE, partHexOf } from '../lib/design.js'
 import { readPhoto } from '../lib/photo.js'
 import { plusWon, won } from '../lib/price.js'
-import ExtraIcon from './ExtraIcon.jsx'
-
-const INK = '#111311'
-
-/**
- * 바퀴 두 개를 비스듬히 본 그림 (160×100)
- * 솔리드: 꽉 찬 색 / 클리어: 반투명 / 사이드 그래픽: 옆면 그래픽(올린 이미지) / 와이드: 두꺼운 바퀴
- */
-export function WheelArt({ type, color, graphic }) {
-  const uid = useId().replace(/[^a-zA-Z0-9]/g, '')
-  const depth = type === 'wide' ? 18 : 10
-  const opacity = type === 'clear' ? 0.5 : 1
-  return (
-    <svg width="100%" height="100%" viewBox="0 0 160 100" role="presentation" aria-hidden="true">
-      {[48, 112].map((cx, i) => {
-        const clip = `wheel-${uid}-${i}`
-        return (
-          <g key={cx}>
-            {/* 바퀴 두께(뒤쪽 면) */}
-            <ellipse cx={cx + depth} cy="50" rx="26" ry="32" fill={color} fillOpacity={opacity} stroke={INK} strokeWidth="2.5" />
-            <rect x={cx} y="18" width={depth} height="64" fill={color} fillOpacity={opacity} />
-            <path d={`M${cx} 18 H${cx + depth} M${cx} 82 H${cx + depth}`} stroke={INK} strokeWidth="2.5" />
-            {type === 'clear' && <ellipse cx={cx + depth} cy="50" rx="18" ry="24" fill="#FFFFFF" fillOpacity="0.35" />}
-            {/* 앞면 */}
-            <ellipse cx={cx} cy="50" rx="26" ry="32" fill={color} fillOpacity={opacity} stroke={INK} strokeWidth="2.5" />
-            {type === 'graphic' &&
-              (graphic ? (
-                <>
-                  <defs>
-                    <clipPath id={clip}>
-                      <ellipse cx={cx} cy="50" rx="22" ry="28" />
-                    </clipPath>
-                  </defs>
-                  <image
-                    href={graphic}
-                    x={cx - 22}
-                    y="22"
-                    width="44"
-                    height="56"
-                    preserveAspectRatio="xMidYMid slice"
-                    clipPath={`url(#${clip})`}
-                  />
-                </>
-              ) : (
-                <ellipse cx={cx} cy="50" rx="19" ry="24" fill="none" stroke="#1E3FD0" strokeWidth="6" strokeDasharray="6 5" />
-              ))}
-            {/* 허브·베어링 */}
-            <ellipse cx={cx} cy="50" rx="9" ry="11" fill="#B8BCC2" stroke={INK} strokeWidth="2" />
-            <ellipse cx={cx} cy="50" rx="3.5" ry="4.5" fill={INK} />
-          </g>
-        )
-      })}
-    </svg>
-  )
-}
 
 // P02 › 바퀴도 내 스타일로 (바퀴 종류 4가지 + 바퀴 색)
 export default function WheelSection({ draft, updateDraft }) {
@@ -103,8 +48,13 @@ export default function WheelSection({ draft, updateDraft }) {
           const on = type === w.id
           return (
             <article key={w.id} className={`pick-card${on ? ' is-on' : ''}`}>
-              <div className="pick-card__img">
-                <WheelArt type={w.id} color={color} graphic={draft.wheelGraphic} />
+              <div className="pick-card__img pick-card__img--photo">
+                <img src={w.img} alt={`${w.name} 바퀴`} loading="lazy" />
+                {w.id === 'graphic' && draft.wheelGraphic && (
+                  <span className="pick-card__graphic" title="올린 그래픽">
+                    <img src={draft.wheelGraphic} alt="내가 올린 바퀴 그래픽" />
+                  </span>
+                )}
               </div>
               <h3 className="pick-card__name">{w.name}</h3>
               <p className="pick-card__desc">{w.desc}</p>
@@ -216,8 +166,8 @@ export function ExtrasSection({ draft, updateDraft }) {
           const on = list.includes(x.id)
           return (
             <article key={x.id} className={`pick-card${on ? ' is-on' : ''}`}>
-              <div className="pick-card__img pick-card__img--tall">
-                <ExtraIcon id={x.id} />
+              <div className="pick-card__img pick-card__img--tall pick-card__img--photo">
+                <img src={x.img} alt={x.name} loading="lazy" />
               </div>
               <h3 className="pick-card__name">{x.name}</h3>
               <p className="pick-card__desc">{x.desc}</p>

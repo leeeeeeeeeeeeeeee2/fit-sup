@@ -8,6 +8,7 @@ const PENDING_TEXT = {
   cart: { title: '장바구니에 담으려면 로그인해 주세요', notice: '장바구니 담기는 로그인하면 가능해요.' },
   save: { title: '디자인을 저장하려면 로그인해 주세요', notice: '디자인 저장은 로그인하면 가능해요.' },
   image: { title: '이미지를 저장하려면 로그인해 주세요', notice: '이미지 저장은 로그인하면 가능해요.' },
+  review: { title: '리뷰를 쓰려면 로그인해 주세요', notice: '리뷰 쓰기는 로그인하면 가능해요.' },
 }
 
 // P06 로그인 (버튼만 누르면 로그인되는 체험용)
@@ -21,7 +22,8 @@ export default function LoginPage() {
     if (pending) {
       // 하던 일이 있으면 P02 › S02-3으로 돌아가 이어서 진행
       setPending(null)
-      navigate('/build#S02-3', { state: { resume: pending } })
+      if (pending === 'review') navigate('/reviews', { state: { resume: 'review' } })
+      else navigate('/build#S02-3', { state: { resume: pending } })
     }
   }
 

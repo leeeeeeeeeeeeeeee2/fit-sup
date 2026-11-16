@@ -145,3 +145,32 @@ export function LogoMark({ color = '#111311' }) {
     </svg>
   )
 }
+
+// 리뷰 메뉴 (모바일 아이콘)
+export function StarLine({ size = 24 }) {
+  return (
+    <svg width={size} height={size} strokeWidth="2" {...base}>
+      <path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" />
+    </svg>
+  )
+}
+
+// 별점 별 (채움)
+export function Star({ size = 18, color = '#1E3FD0', empty = false }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M12 2.8l2.85 5.8 6.4.93-4.63 4.5 1.1 6.37L12 17.4l-5.72 3 1.1-6.37-4.63-4.5 6.4-.93z"
+        fill={empty ? '#DCDDD6' : color}
+      />
+    </svg>
+  )
+}
+
+export function ThumbUp({ size = 18 }) {
+  return (
+    <svg width={size} height={size} strokeWidth="2" {...base}>
+      <path d="M7 10v11H4V10zM7 10l4-7c1.7 0 2.6 1.1 2.3 2.8L12.8 9H19a2 2 0 012 2.3l-1.3 7.6A2.5 2.5 0 0117.2 21H7" />
+    </svg>
+  )
+}

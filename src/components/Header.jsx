@@ -2,7 +2,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useStore } from '../store/StoreContext.jsx'
 import { LogoMark } from './Icons.jsx'
 // 모바일·태블릿(1023px 이하) 아이콘 메뉴용 — 데스크톱에서는 .m-only로 숨김
-import { Bookmark, Cart, LogOut, Pencil, User } from './Icons.jsx'
+import { Bookmark, Cart, LogOut, Pencil, StarLine, User } from './Icons.jsx'
 
 // 공통 메뉴 M01~M05
 export default function Header() {
@@ -29,6 +29,12 @@ export default function Header() {
               <NavLink data-id="M03" to="/my-designs" className="gnb__link">
                 <span className="m-only gnb__icon" aria-hidden="true"><Bookmark /></span>
                 내 디자인
+              </NavLink>
+            </li>
+            <li>
+              <NavLink data-id="M06" to="/reviews" className="gnb__link">
+                <span className="m-only gnb__icon" aria-hidden="true"><StarLine /></span>
+                리뷰
               </NavLink>
             </li>
             <li>
