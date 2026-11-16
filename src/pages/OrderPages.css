@@ -430,3 +430,19 @@
 .pay-box > * + * {
   margin-top: 20px;
 }
+
+/* P06 로그인 창·완료 */
+.login-dialog {
+  width: 460px;
+}
+
+.login__done {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.login__done svg {
+  flex: none;
+  color: var(--brand);
+}

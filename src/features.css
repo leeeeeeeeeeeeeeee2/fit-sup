@@ -626,12 +626,17 @@
   display: none;
 }
 
+/* 로고·슬로건 줄도 가운데 정렬 */
 .site-footer__top {
+  flex: 1 1 100%;
+  justify-content: center;
   gap: 0;
 }
 
 .site-footer__brand {
   flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: 12px;
 }
@@ -679,6 +684,7 @@
 }
 
 .site-footer__copy {
+  align-self: center;
   font-size: 12px;
 }
 
