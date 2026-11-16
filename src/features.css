@@ -156,8 +156,6 @@
 
 .hero__free {
   display: inline-block;
-  font-family: 'Nanum Pen Script', cursive;
-  font-size: 1.18em;
   color: var(--brand);
   transform: rotate(-4deg);
   text-shadow: 3px 3px 0 var(--ink);
