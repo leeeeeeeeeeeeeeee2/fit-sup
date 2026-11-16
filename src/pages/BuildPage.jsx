@@ -84,13 +84,9 @@ export default function BuildPage() {
       showToast(SAVE_TOAST)
     }
     if (st?.resume === 'image') setModalOpen(true)
-    if (st?.resume === 'cart') {
-      addToCart(draft)
-      showToast(CART_TOAST)
-    }
     if (location.hash) {
       const id = location.hash.slice(1)
-      if (id === 'S02-3') setStep(2)
+      if (id === 'S02-3' || id === 'S02-4') setStep(2)
       requestAnimationFrame(() => scrollToId(id))
     } else {
       window.scrollTo(0, 0)
@@ -603,7 +599,7 @@ export default function BuildPage() {
       <WheelSection draft={draft} updateDraft={updateDraft} />
       <ExtrasSection draft={draft} updateDraft={updateDraft} />
 
-      <section data-id="S02-4" aria-labelledby="price-title" className="band band--surface band--top-line">
+      <section id="S02-4" data-id="S02-4" aria-labelledby="price-title" className="band band--surface band--top-line">
         <div className="container price">
           <div className="price__summary">
             <h2 id="price-title" className="price__title">

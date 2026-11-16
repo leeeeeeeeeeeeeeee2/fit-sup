@@ -1,6 +1,6 @@
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useStore } from '../store/StoreContext.jsx'
-import { LogoMark } from './Icons.jsx'
+import { Logo } from './Icons.jsx'
 // 모바일·태블릿(1023px 이하) 아이콘 메뉴용 — 데스크톱에서는 .m-only로 숨김
 import { Bookmark, Cart, LogOut, Pencil, StarLine, User } from './Icons.jsx'
 
@@ -14,8 +14,7 @@ export default function Header() {
     <header data-id="header" className="site-header">
       <div className="site-header__inner">
         <Link data-id="M01" to="/" className="logo" aria-label="핏썹 메인으로">
-          <LogoMark />
-          <span className="logo__word">핏썹</span>
+          <Logo />
         </Link>
         <nav aria-label="주요 메뉴">
           <ul className="gnb">

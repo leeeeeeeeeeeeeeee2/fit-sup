@@ -5,7 +5,11 @@ import './OrderPages.css'
 
 // 로그인하러 오기 전에 하던 일별 안내 문구
 const PENDING_TEXT = {
-  cart: { title: '장바구니에 담으려면 로그인해 주세요', notice: '장바구니 담기는 로그인하면 가능해요.' },
+  cart: {
+    title: '장바구니에 담으려면 로그인해 주세요',
+    notice: '장바구니 담기는 로그인하면 가능해요.',
+    next: '로그인 후 장바구니 담기를 다시 눌러 주세요.',
+  },
   save: { title: '디자인을 저장하려면 로그인해 주세요', notice: '디자인 저장은 로그인하면 가능해요.' },
   image: { title: '이미지를 저장하려면 로그인해 주세요', notice: '이미지 저장은 로그인하면 가능해요.' },
   review: { title: '리뷰를 쓰려면 로그인해 주세요', notice: '리뷰 쓰기는 로그인하면 가능해요.' },
@@ -23,6 +27,8 @@ export default function LoginPage() {
       // 하던 일이 있으면 P02 › S02-3으로 돌아가 이어서 진행
       setPending(null)
       if (pending === 'review') navigate('/reviews', { state: { resume: 'review' } })
+      // 장바구니는 자동으로 담지 않고 담기 버튼이 있는 곳으로만 돌려보냄
+      else if (pending === 'cart') navigate('/build#S02-4')
       else navigate('/build#S02-3', { state: { resume: pending } })
     }
   }
@@ -41,7 +47,7 @@ export default function LoginPage() {
               {text && (
                 <p className="chip chip--notice login__chip">
                   <Alert size={18} strokeWidth={2.2} />
-                  {text.notice} 로그인하면 이어서 진행해 드릴게요. 만들던 디자인은 그대로 남아 있어요.
+                  {text.notice} {text.next ?? '로그인하면 이어서 진행해 드릴게요.'} 만들던 디자인은 그대로 남아 있어요.
                 </p>
               )}
               <h2 id="login-title" className={`login__title${text ? '' : ' login__title--first'}`}>

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { LogoMark } from './Icons.jsx'
+import { Logo } from './Icons.jsx'
 
 export default function Footer() {
   return (
@@ -8,8 +8,7 @@ export default function Footer() {
         <div className="site-footer__top">
           <div className="site-footer__brand">
             <Link to="/" className="logo logo--white" aria-label="핏썹 메인으로">
-              <LogoMark color="#FFFFFF" />
-              <span className="logo__word">핏썹</span>
+              <Logo color="#FFFFFF" height={26} />
             </Link>
             <p>사이즈는 딱 맞게, 디자인은 내 맘대로.</p>
           </div>

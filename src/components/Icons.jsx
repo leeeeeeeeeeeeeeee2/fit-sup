@@ -135,13 +135,45 @@ export function LogOut({ size = 24 }) {
   )
 }
 
-// 로고(안): 보드 옆모습 아이콘
-export function LogoMark({ color = '#111311' }) {
+// 로고: FIT'SUP 글자 + 아포스트로피 자리에 파란 보드 (docs/assets/logo.svg와 같은 모양)
+// 글꼴 Anton은 index.html에서 불러옴 — 글자로 그려서 이미지가 아닌 인라인 SVG로 씀
+export function Logo({ color = '#111311', height = 36 }) {
   return (
-    <svg width="44" height="26" viewBox="0 0 44 26" aria-hidden="true">
-      <rect x="2" y="6" width="40" height="7" rx="3.5" fill={color} />
-      <circle cx="12" cy="19" r="4" fill="none" stroke={color} strokeWidth="2.5" />
-      <circle cx="32" cy="19" r="4" fill="none" stroke={color} strokeWidth="2.5" />
+    <svg
+      className="logo__svg"
+      height={height}
+      width={(height * 330) / 102}
+      viewBox="0 24 330 102"
+      aria-hidden="true"
+    >
+      <text
+        x="150"
+        y="116"
+        textAnchor="end"
+        fill={color}
+        fontFamily="Anton, sans-serif"
+        fontSize="88"
+        textLength="126"
+        lengthAdjust="spacingAndGlyphs"
+      >
+        FIT
+      </text>
+      <rect x="154" y="34" width="16" height="50" rx="8" fill="#1E3FD0" />
+      <circle cx="162" cy="42" r="1.8" fill="#FFFFFF" />
+      <circle cx="162" cy="49" r="1.8" fill="#FFFFFF" />
+      <circle cx="162" cy="69" r="1.8" fill="#FFFFFF" />
+      <circle cx="162" cy="76" r="1.8" fill="#FFFFFF" />
+      <text
+        x="176"
+        y="116"
+        fill={color}
+        fontFamily="Anton, sans-serif"
+        fontSize="88"
+        textLength="128"
+        lengthAdjust="spacingAndGlyphs"
+      >
+        SUP
+      </text>
     </svg>
   )
 }
