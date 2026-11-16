@@ -1,0 +1,204 @@
+/* P01 메인 */
+
+/* S01-1 히어로 */
+.hero {
+  padding-top: 96px;
+  padding-bottom: 120px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 56px;
+}
+
+.hero__text {
+  flex: 1 1 620px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.hero__title {
+  margin-top: 28px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 80px;
+  line-height: 1.14;
+  letter-spacing: -0.01em;
+}
+
+.hero__desc {
+  margin-top: 28px;
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--text-muted);
+}
+
+.hero__cta {
+  margin-top: 44px;
+  padding: 0 34px;
+}
+
+.hero__figure {
+  flex: 1 1 460px;
+  min-width: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.hero__board-box {
+  height: 500px;
+  background: var(--surface);
+  border: var(--border-line) solid var(--ink);
+  border-radius: var(--radius-panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-board {
+  max-width: 500px;
+  transform: rotate(-14deg);
+}
+
+/* S01-2 타는 스타일 */
+.style-grid {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+.style-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--ground);
+  border-radius: var(--radius-card);
+  padding: 14px;
+}
+
+.style-card__img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  background: var(--placeholder);
+}
+
+.style-card__body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 22px 8px 8px;
+}
+
+.style-card__title {
+  font-size: 22px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.style-card__desc {
+  margin: 10px 0 24px;
+  flex: 1 1 auto;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text-muted);
+}
+
+.style-card__cta {
+  min-height: 48px;
+  padding: 0 20px;
+  font-size: 16px;
+  white-space: normal;
+  text-align: left;
+}
+
+/* S01-3 이용 흐름 */
+.flow-grid {
+  margin: 56px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.flow-card {
+  background: var(--surface);
+  border: var(--border-line) solid var(--ink);
+  border-radius: var(--radius-card);
+  padding: 36px 32px 40px;
+}
+
+.flow-card__no {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 64px;
+  line-height: 1;
+}
+
+.flow-card__title {
+  margin: 24px 0 12px;
+  font-size: 24px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.flow-card__desc {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text-muted);
+}
+
+/* S01-4 구매 전 확인 */
+.check {
+  padding-top: 104px;
+  padding-bottom: 112px;
+}
+
+.check__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 1.2;
+}
+
+.check__desc {
+  margin-top: 18px;
+  max-width: 720px;
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.check-grid {
+  margin: 48px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.check-box {
+  border: var(--border-line) dashed #ffffff;
+  border-radius: var(--radius-lg);
+  padding: 28px;
+}
+
+.check-box h3 {
+  font-size: 20px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.check-box p {
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.7;
+}

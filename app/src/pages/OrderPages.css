@@ -1,0 +1,331 @@
+/* P03 장바구니 · P04 주문·결제 · P05 내 디자인 · P06 로그인 공통 */
+
+.work {
+  padding-top: 72px;
+  padding-bottom: 120px;
+}
+
+.work--center {
+  padding-top: 96px;
+}
+
+.work__first {
+  margin-top: 48px;
+}
+
+.work__title {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* 목록 행 */
+.board-list {
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.board-row {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  padding: 20px 24px;
+  background: var(--surface);
+  border: var(--border-line) solid var(--ink);
+  border-radius: var(--radius-card);
+}
+
+.board-row__thumb {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 104px;
+  background: var(--ground);
+  border-radius: var(--radius-md);
+}
+
+.board-row__info {
+  flex: 1 1 360px;
+  min-width: 0;
+}
+
+.board-row__name {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.board-row__spec {
+  margin-top: 6px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.board-row__price {
+  width: 120px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.empty-box {
+  margin-top: 20px;
+  padding: 32px;
+  background: var(--surface);
+  border: var(--border-line) solid var(--ink);
+  border-radius: var(--radius-card);
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.empty-box a {
+  font-weight: 700;
+}
+
+/* 요약 상자 */
+.summary-box {
+  margin-top: 40px;
+  padding: 36px 40px;
+  background: var(--surface);
+  border: var(--border-strong) solid var(--ink);
+  border-radius: var(--radius-card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.summary-box--pay {
+  padding: 40px;
+}
+
+.summary-box__text {
+  flex: 1 1 520px;
+  min-width: 0;
+}
+
+.summary-box__text > p {
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text-muted);
+}
+
+.summary-box__text > .summary-box__strong {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.summary-box__text > .summary-box__note {
+  margin-top: 6px;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.summary-box .btn--primary {
+  padding: 0 40px;
+}
+
+/* S04-2 배송 정보 */
+.ship-box {
+  margin-top: 72px;
+  padding: 40px;
+  background: var(--surface);
+  border: var(--border-line) solid var(--ink);
+  border-radius: var(--radius-card);
+}
+
+.ship-box .chip--notice {
+  margin-top: 16px;
+}
+
+.ship-box__row {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.ship-box__addr {
+  margin-top: 24px;
+}
+
+/* 패널 (완료·로그인 전·로그인) */
+.panel {
+  background: var(--surface);
+  border: var(--border-line) solid var(--ink);
+  border-radius: var(--radius-panel);
+}
+
+.panel--center {
+  padding: 64px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.work--center .panel--center {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 64px 48px 56px;
+}
+
+.panel__gap {
+  margin-top: 24px;
+}
+
+.panel__chip {
+  margin-top: 16px;
+  font-size: 15px;
+}
+
+.panel__cta {
+  margin-top: 36px;
+  padding: 0 40px;
+}
+
+.panel__display {
+  margin-top: 32px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 1.2;
+}
+
+.panel__desc {
+  margin-top: 18px;
+  max-width: 560px;
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--text-muted);
+}
+
+.panel__actions {
+  margin-top: 40px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.panel__actions .btn {
+  padding: 0 28px;
+}
+
+/* P05 저장한 디자인 카드 */
+.design-grid {
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+.design-card {
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  background: var(--surface);
+  border: var(--border-line) solid var(--ink);
+  border-radius: var(--radius-card);
+}
+
+.design-card__img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  background: var(--ground);
+  border-radius: var(--radius-md);
+}
+
+.design-card__body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 8px 8px;
+}
+
+.design-card__name {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.design-card__spec {
+  margin: 6px 0 24px;
+  flex: 1 1 auto;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.design-card__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.design-card__actions .btn--sm {
+  min-height: 48px;
+  padding: 0 20px;
+}
+
+/* P06 로그인 */
+.login {
+  max-width: 760px;
+  padding: 48px;
+}
+
+.login__chip {
+  align-items: flex-start;
+  padding: 10px 18px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.login__chip svg {
+  flex: none;
+  margin-top: 3px;
+}
+
+.login__title {
+  margin-top: 28px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 1.25;
+}
+
+.login__title--first {
+  margin-top: 0;
+}
+
+.login__text {
+  margin-top: 18px;
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--text-muted);
+}
+
+.login__text:first-child {
+  margin-top: 0;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.login__cta {
+  margin-top: 36px;
+}

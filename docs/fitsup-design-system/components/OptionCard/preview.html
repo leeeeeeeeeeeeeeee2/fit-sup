@@ -1,0 +1,35 @@
+<!-- @dsCard group="Selection" height=330 subtitle="하나만 고르는 카드 · 선택 · 추천" -->
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+body{margin:0;padding:24px;background:var(--surface);color:var(--ink);font-family:var(--font-sans);word-break:keep-all}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.opt{display:block;width:100%;text-align:left;padding:22px 22px 24px;border-radius:var(--radius-card);font-family:inherit;box-sizing:border-box;cursor:pointer;background:var(--ground);color:var(--ink);border:var(--border-line) solid var(--line-soft)}
+.opt[aria-pressed="true"]{background:var(--ink);color:var(--on-ink);border:var(--border-action) solid var(--ink)}
+.t{display:block;font-size:20px;font-weight:700;line-height:1.4}
+.d{display:block;margin-top:8px;font-size:15px;line-height:1.7}
+.lens{margin-top:24px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.len{display:flex;flex-direction:column;padding:18px 18px 22px;border-radius:var(--radius-card);background:var(--ground);border:var(--border-line) solid var(--line-soft);text-align:left;font-family:inherit;color:var(--ink)}
+.len[aria-pressed="true"]{border:var(--border-action) solid var(--ink)}
+.head{display:flex;align-items:center;gap:8px;font-size:22px;font-weight:700}
+.rec{display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:var(--radius-pill);background:var(--ink);color:var(--on-ink);font-size:13px}
+.strong{margin-top:12px;font-size:17px;font-weight:700}
+.sub{margin-top:4px;font-size:15px;color:var(--text-muted);line-height:1.7}
+</style>
+</head>
+<body>
+<div class="grid">
+<button class="opt" type="button" aria-pressed="false"><span class="t">서프 스케이트</span><span class="d">땅 위에서 서핑하듯 몸을 크게 흔들어(펌핑) 앞으로 나가요.</span></button>
+<button class="opt" type="button" aria-pressed="true"><span class="t">카빙 ✓</span><span class="d">몸을 좌우로 기울여 S자 커브를 부드럽게 그려요.</span></button>
+<button class="opt" type="button" aria-pressed="false"><span class="t">사이드와인더</span><span class="d">트럭(바퀴를 잡아 주는 부품)이 더 깊게 꺾여 좁은 곳에서도 짧게 돌아요.</span></button>
+<button class="opt" type="button" aria-pressed="false"><span class="t">크루저</span><span class="d">동네, 캠퍼스, 역까지 가볍게 밀고 다니고 들고 다니기도 편해요.</span></button>
+</div>
+<div class="lens">
+<button class="len" type="button" aria-pressed="false"><span class="head">27인치</span><span class="strong">이동과 재미를 함께 원한다면</span><span class="sub">휴대성과 안정성이 균형 잡힌 일상용이에요.</span></button>
+<button class="len" type="button" aria-pressed="true"><span class="head">32인치 ✓ <span class="rec">추천</span></span><span class="strong">처음 배우거나 안정감이 중요하다면</span><span class="sub">발판이 넓어 편안하고 속도를 내기 좋아요. 휴대성은 낮아요.</span></button>
+</div>
+</body>
+</html>

@@ -1,0 +1,109 @@
+/*
+ * 모든 화면(데스크톱 포함)에 적용하는 추가 규칙
+ * 사용자가 데스크톱도 바꾸라고 한 항목만 여기에 둠 (2026-11-16 답변)
+ */
+
+/* 푸터 메뉴 삭제 (데스크톱 포함) */
+.site-footer nav[aria-label='푸터 메뉴'] {
+  display: none;
+}
+
+/* J · 덱 무늬 '직접 만들기' — 누를 수 있는 버튼이 됨 */
+.tile--dashed {
+  cursor: pointer;
+}
+
+/* J · 그리기 창 */
+.draw-sheet {
+  width: 720px;
+}
+
+.draw-canvas {
+  padding: 16px;
+  background: var(--ground);
+  border-radius: var(--radius-lg);
+}
+
+.draw-canvas svg {
+  display: block;
+  touch-action: none; /* 그리는 동안 화면이 스크롤되지 않게 */
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: crosshair;
+}
+
+.draw-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.draw-tools__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.draw-tools__gap {
+  flex: 1 1 auto;
+}
+
+.draw-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: var(--border-line) solid var(--line-soft);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.draw-chip.is-on {
+  border: var(--border-action) solid var(--ink);
+  font-weight: 700;
+}
+
+.draw-chip:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.draw-color {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: var(--border-action) solid transparent;
+  border-radius: var(--radius-pill);
+  background: transparent;
+}
+
+.draw-color span {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border: var(--border-line) solid var(--ink);
+  border-radius: var(--radius-pill);
+}
+
+.draw-color.is-on {
+  border-color: var(--ink);
+}
+
+.draw-color:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.draw-size__dot {
+  display: inline-block;
+  border-radius: var(--radius-pill);
+  background: var(--ink);
+}
