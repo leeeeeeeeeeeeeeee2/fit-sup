@@ -419,6 +419,17 @@ export default function ReviewsPage() {
               )
             })}
           </ul>
+          {list.length > 0 && (
+            <div className="review-more">
+              <button
+                type="button"
+                className="review-more__btn"
+                onClick={() => showToast({ message: '지금 보여 드릴 수 있는 예시 리뷰는 여기까지예요.' })}
+              >
+                <strong>리뷰 더 보기</strong> {list.length} / {num(S.total + myReviews.length)}
+              </button>
+            </div>
+          )}
         </section>
       </main>
 

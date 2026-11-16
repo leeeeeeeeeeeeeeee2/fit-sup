@@ -471,3 +471,43 @@
     justify-content: flex-end;
   }
 }
+
+/* 리뷰 더 보기 */
+.review-list {
+  padding-bottom: 0;
+}
+
+.review-more {
+  display: flex;
+  justify-content: center;
+  padding: 0 0 8px;
+  margin-top: -1px;
+}
+
+.review-list-sec .review-more {
+  margin-top: 0;
+  padding: 24px 32px 28px;
+  border: var(--border-line) solid var(--ink);
+  border-top: 1px solid #e4e5df;
+  border-radius: 0 0 var(--radius-panel) var(--radius-panel);
+  background: var(--surface);
+}
+
+.review-list-sec .review-list:has(+ .review-more) {
+  border-bottom: 0;
+  border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+}
+
+.review-more__btn {
+  min-height: 44px;
+  padding: 0 24px;
+  border: var(--border-line) solid var(--ink);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.review-more__btn strong {
+  color: var(--ink);
+}

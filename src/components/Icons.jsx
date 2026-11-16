@@ -161,7 +161,10 @@ export function Star({ size = 18, color = '#1E3FD0', empty = false }) {
     <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
       <path
         d="M12 2.8l2.85 5.8 6.4.93-4.63 4.5 1.1 6.37L12 17.4l-5.72 3 1.1-6.37-4.63-4.5 6.4-.93z"
-        fill={empty ? '#DCDDD6' : color}
+        fill={empty ? 'none' : color}
+        stroke={empty ? '#9A9D96' : 'none'}
+        strokeWidth={empty ? 1.6 : 0}
+        strokeLinejoin="round"
       />
     </svg>
   )
