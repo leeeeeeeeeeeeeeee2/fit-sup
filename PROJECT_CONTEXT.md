@@ -343,14 +343,14 @@
 
 ## 6. 에셋
 - 로고: 완성 화면과 같은 보드 옆모습 SVG 아이콘 + "핏썹" 워드마크로 구현. `assets/logo.svg`(FIT'SUP 워드마크)는 아직 쓰지 않음. 최종 로고 [미정]
-- 이미지: `app/src/assets/main/`에 스타일 사진 4장(style-surfskate·carving·sidewinder·cruiser.jpg, 896×1200) 복사해 S01-2 카드에 사용 (출처: 답변). 그 밖의 자리는 완성 화면처럼 SVG 보드 그림으로 그림. 필요한 자리 (출처: 04-site-wireframe.md)
+- 이미지: `src/assets/main/`에 스타일 사진 4장(style-surfskate·carving·sidewinder·cruiser.jpg, 896×1200) 복사해 S01-2 카드에 사용 (출처: 답변). 그 밖의 자리는 완성 화면처럼 SVG 보드 그림으로 그림. 필요한 자리 (출처: 04-site-wireframe.md)
   - S01-1 히어로 보드 미리보기 예시
   - S01-2 스타일 장면 4장 (서프 스케이트·카빙·사이드와인더·크루저) — 동작이 드러나는 실제 라이딩 장면 원칙 (출처: 05-site-reference.md)
   - S02-2 길이별 보드 3장 (22·27·32인치)
   - S02-3 덱 윗면 미리보기, 옆모습 미리보기 (선택값에 따라 바뀜)
   - P03·P04·P05 목록의 보드 윗면, 이미지 저장 창의 PNG 이미지
   - S04-4 완료 표시
-- 글꼴: Black Han Sans(제목), Noto Sans KR(본문), 덱 문구용 Rubik Spray Paint·Permanent Marker·Nanum Pen Script — `app/index.html`에서 Google Fonts로 불러옴 (출처: 디자인 승인, 디자인 시스템)
+- 글꼴: Black Han Sans(제목), Noto Sans KR(본문), 덱 문구용 Rubik Spray Paint·Permanent Marker·Nanum Pen Script — `index.html`에서 Google Fonts로 불러옴 (출처: 디자인 승인, 디자인 시스템)
 - 파일 위치: `fitsup/assets/` 폴더 있음. 사용 방식은 4단계에서 결정 (출처: 답변)
 
 ## 7. 반응형 기준
@@ -359,16 +359,16 @@
 - 작은 화면에서 바뀌는 배치: [미정] → 6단계에서 결정
 - 기준 폭: 데스크톱 1024px 이상, 태블릿 361~1023px, 모바일 360px 이하 (출처: 2026-11-16 답변)
 - 터치 환경에서 바뀌는 인터랙션: [미정] → 6단계에서 결정
-  - 일부 적용 (2026-11-16): `docs/mobile-interaction.md` 정리표 중 처리 방식이 하나로 정해진 항목(16·19·21·22·23·24·26·37·43번)만 `app/src/mobile.css`에 적용. 화면 폭 1023px 이하에서만 동작하고 1024px 이상 데스크톱은 바뀌지 않음 (출처: 답변)
+  - 일부 적용 (2026-11-16): `docs/mobile-interaction.md` 정리표 중 처리 방식이 하나로 정해진 항목(16·19·21·22·23·24·26·37·43번)만 `src/mobile.css`에 적용. 화면 폭 1023px 이하에서만 동작하고 1024px 이상 데스크톱은 바뀌지 않음 (출처: 답변)
 
 ## 8. 기술과 배포
 - 구현 방식: React + Vite, JavaScript, 기본 CSS (출처: 답변)
 - 폴더 구조 (출처: 답변)
-  - `fitsup/app/` — React 앱 (새로 만듦)
+  - `fitsup/` (루트) — React 앱. `package.json`·`vite.config.js`·`index.html`·`src/`가 루트에 있어 `fitsup/`에서 바로 `npm run dev` 실행 (2026-11-16 `app/`에서 옮김)
   - `fitsup/docs/` — 기획 문서. **삭제하지 않음**
   - `fitsup/site/` — 기존 1차 구현(HTML·CSS·JS). 참고용으로 남김
   - `fitsup/assets/` — 에셋
-  - `app/src/` 구조: `pages/`(페이지별 컴포넌트·CSS), `components/`(헤더·푸터·보드 그림·알림·이미지 저장 창·목록 행·아이콘), `data/options.js`(선택지·문구), `lib/design.js`(구성 문장·추천 규칙), `store/StoreContext.jsx`(상태), `assets/main/`(사진)
+  - `src/` 구조: `pages/`(페이지별 컴포넌트·CSS), `components/`(헤더·푸터·보드 그림·알림·이미지 저장 창·목록 행·아이콘), `data/options.js`(선택지·문구), `lib/design.js`(구성 문장·추천 규칙), `store/StoreContext.jsx`(상태), `assets/main/`(사진)
 - 페이지 이동: react-router-dom (출처: 답변). 주소 — P01 `/` · P02 `/build` · P03 `/cart` · P04 `/checkout` (완료 `/checkout/complete`) · P05 `/my-designs` · P06 `/login`
 - 데이터 보관: 브라우저 localStorage(`fitsup` 키)에 장바구니·로그인 상태·저장한 디자인·만들던 디자인 보관, 새로고침해도 유지 (출처: 답변)
 - 배포 방법: [미정] → 7단계에서 다시 물음 (출처: 답변)

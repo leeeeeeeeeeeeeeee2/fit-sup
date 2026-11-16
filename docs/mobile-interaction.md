@@ -85,9 +85,9 @@
 
 | 대상 | 현재 값 | 위치 |
 |---|---|---|
-| 내 디자인 카드 | `minmax(340px, 1fr)` | `app/src/pages/OrderPages.css:232` |
-| 이미지 저장 창 | 폭 600px | `app/src/index.css:576` |
-| 장바구니 행 썸네일 | 폭 180px | `app/src/pages/OrderPages.css:48` |
+| 내 디자인 카드 | `minmax(340px, 1fr)` | `src/pages/OrderPages.css:232` |
+| 이미지 저장 창 | 폭 600px | `src/index.css:576` |
+| 장바구니 행 썸네일 | 폭 180px | `src/pages/OrderPages.css:48` |
 
 참고: 지금 CSS에는 `@media`, `:hover`, `transition`, `animation`이 하나도 없어요. 모바일 작업은 효과를 줄이는 일보다 레이아웃을 정리하는 일이 중심이 돼요.
 
@@ -97,18 +97,18 @@
 - 기준 폭 (2026-11-16 답변): 데스크톱 1024px 이상 / 태블릿 361~1023px / 모바일 360px 이하
 - 적용 대상: 1023px 이하(태블릿+모바일)만. 1024px 이상 데스크톱은 바꾸지 않아요. 타일 크기 줄이기는 599px 이하, 색 점 줄이기는 360px 이하(모바일)에 적용해요.
 - 파일
-  - `app/src/mobile.css`: 모바일 규칙 전체 (새 파일)
-  - `app/src/main.jsx`: `mobile.css` import 한 줄 추가
-  - `app/src/pages/BuildPage.jsx`: 접기 상태값 2개와 모바일 전용 버튼 2개 추가. 데스크톱에서는 항상 숨겨요.
-  - `app/src/components/Header.jsx`: 아이콘 import 한 줄과 메뉴 아이콘 5개 추가. 데스크톱에서는 항상 숨겨요.
-  - `app/src/components/Icons.jsx`: 메뉴 아이콘 4개(Bookmark, Cart, User, LogOut) 추가
+  - `src/mobile.css`: 모바일 규칙 전체 (새 파일)
+  - `src/main.jsx`: `mobile.css` import 한 줄 추가
+  - `src/pages/BuildPage.jsx`: 접기 상태값 2개와 모바일 전용 버튼 2개 추가. 데스크톱에서는 항상 숨겨요.
+  - `src/components/Header.jsx`: 아이콘 import 한 줄과 메뉴 아이콘 5개 추가. 데스크톱에서는 항상 숨겨요.
+  - `src/components/Icons.jsx`: 메뉴 아이콘 4개(Bookmark, Cart, User, LogOut) 추가
   - 데스크톱도 바꾸기로 한 항목(J 직접 만들기, 푸터 메뉴 삭제):
-    - `app/src/features.css`: 모든 화면 공통 규칙 (새 파일)
-    - `app/src/components/DrawSheet.jsx`: 그리기 창 (새 파일), `app/src/lib/drawing.js`: 그림 좌표 도우미 (새 파일)
-    - `app/src/components/Board.jsx`: 덱 위 그림 레이어 추가. 그림이 없으면 아무것도 그리지 않아 기존 화면과 같음
-    - `app/src/data/options.js`: 디자인에 `drawing` 항목, 펜 색·굵기 목록 추가 / `app/src/lib/design.js`: 그림이 있을 때만 "직접 그림" 문구 추가
-    - `app/src/pages/BuildPage.jsx`: "직접 만들기" 버튼의 비활성 표시를 없애고 누르면 그리기 창이 열리게 고침 (기존 줄 5줄 수정)
-    - `app/src/components/ImageModal.jsx`: 모바일용 PNG 미리보기 추가 (기존 내려받기 코드는 그대로)
+    - `src/features.css`: 모든 화면 공통 규칙 (새 파일)
+    - `src/components/DrawSheet.jsx`: 그리기 창 (새 파일), `src/lib/drawing.js`: 그림 좌표 도우미 (새 파일)
+    - `src/components/Board.jsx`: 덱 위 그림 레이어 추가. 그림이 없으면 아무것도 그리지 않아 기존 화면과 같음
+    - `src/data/options.js`: 디자인에 `drawing` 항목, 펜 색·굵기 목록 추가 / `src/lib/design.js`: 그림이 있을 때만 "직접 그림" 문구 추가
+    - `src/pages/BuildPage.jsx`: "직접 만들기" 버튼의 비활성 표시를 없애고 누르면 그리기 창이 열리게 고침 (기존 줄 5줄 수정)
+    - `src/components/ImageModal.jsx`: 모바일용 PNG 미리보기 추가 (기존 내려받기 코드는 그대로)
 - 기존 코드는 지우거나 고친 줄이 없어요. 모두 추가만 했어요.
 - 커스텀 커서, 마우스 전용 효과는 코드에 없어서 끌 대상이 없었어요.
 
