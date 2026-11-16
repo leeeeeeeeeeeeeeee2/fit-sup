@@ -29,10 +29,10 @@ export default function OrderCompletePage() {
             />
           </svg>
           <h2 id="done-title" className="panel__display">
-            가상 주문이 완료되었어요
+            주문이 완료되었어요
           </h2>
           <p className="panel__desc">
-            선택한 보드 {lastOrderCount}개의 주문 흐름을 끝까지 체험했어요. 실제 결제·상품 제작·배송은 진행되지 않아요.
+            선택한 보드 {lastOrderCount}개의 주문이 접수되었어요. 핏썹이 정성껏 만들어 보내 드릴게요.
           </p>
           <div className="panel__actions">
             <a data-id="B04-2" href="/build" className="btn btn--md" onClick={startNew}>

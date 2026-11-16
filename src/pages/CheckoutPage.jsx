@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import BoardListItem from '../components/BoardListItem.jsx'
 import { Alert } from '../components/Icons.jsx'
+import { cartTotal, won } from '../lib/price.js'
 import { useStore } from '../store/StoreContext.jsx'
 import './OrderPages.css'
 
@@ -86,7 +87,7 @@ export default function CheckoutPage() {
           </h2>
           <p className="chip chip--notice">
             <Alert />
-            체험용 입력란이에요. 실제 개인정보를 입력하지 마세요.
+            정확한 배송을 위해 받는 분 정보를 다시 한번 확인해 주세요.
           </p>
           <div className="ship-box__row">
             <Field
@@ -122,13 +123,14 @@ export default function CheckoutPage() {
         <section data-id="S04-3" aria-labelledby="pay-title" className="summary-box summary-box--pay">
           <div className="summary-box__text">
             <h2 id="pay-title" className="work__title">
-              실제 결제 없이 주문을 체험해 보세요
+              결제 금액
             </h2>
-            <p className="summary-box__strong">주문 상품 {n}개 · 상품 금액과 배송비는 판매 정책 확정 후 표시돼요.</p>
-            <p className="summary-box__note">이 화면은 가상 결제 체험용으로, 카드 정보 입력이나 실제 금액 청구가 없어요.</p>
+            <p className="summary-box__strong">
+              주문 상품 {n}개 · 합계 {won(cartTotal(cart))}
+            </p>
           </div>
           <button data-id="B04-1" type="button" className="btn btn--primary" onClick={onPay}>
-            가상 결제 완료하기
+            결제하기
           </button>
         </section>
       </main>

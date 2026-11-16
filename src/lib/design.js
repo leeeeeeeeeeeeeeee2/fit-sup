@@ -1,4 +1,4 @@
-import { COLORS, DEFAULT_DESIGN, FONTS, PATTERNS, STYLES } from '../data/options.js'
+import { COLORS, DEFAULT_DESIGN, EXTRAS, FONTS, PATTERNS, STYLES, WHEEL_TYPES } from '../data/options.js'
 
 export const HEX_RE = /^[0-9A-F]{6}$/
 
@@ -19,13 +19,27 @@ export function patternOf(id) {
   return PATTERNS.find((p) => p.id === id) ?? PATTERNS[0]
 }
 
-// 직접 입력한 6자리 색 코드가 있으면 그 색을 씀
+// 직접 입력한 6자리 색 코드가 있으면 그 색을 씀 (part: deck | wheel | truck)
+export function partHexOf(d, part) {
+  const hex = d[`${part}Hex`]
+  return HEX_RE.test(hex ?? '') ? `#${hex}` : colorOf(part, d[part]).hex
+}
+
+export function partNameOf(d, part) {
+  const hex = d[`${part}Hex`]
+  return HEX_RE.test(hex ?? '') ? `#${hex}` : colorOf(part, d[part]).name
+}
+
 export function deckHexOf(d) {
-  return HEX_RE.test(d.deckHex) ? `#${d.deckHex}` : colorOf('deck', d.deck).hex
+  return partHexOf(d, 'deck')
 }
 
 export function deckNameOf(d) {
-  return HEX_RE.test(d.deckHex) ? `#${d.deckHex}` : colorOf('deck', d.deck).name
+  return partNameOf(d, 'deck')
+}
+
+export function wheelTypeOf(d) {
+  return WHEEL_TYPES.find((w) => w.id === d.wheelType) ?? WHEEL_TYPES[0]
 }
 
 export function normalizeDesign(d) {
@@ -39,11 +53,17 @@ export function describe(d) {
   if (s) parts.push(s.name)
   parts.push(`${d.length}인치`)
   parts.push(`${deckNameOf(d)} 덱`)
-  parts.push(`${colorOf('wheel', d.wheel).name} 바퀴`)
-  parts.push(`${colorOf('truck', d.truck).name} 트럭`)
+  const wt = wheelTypeOf(d)
+  parts.push(`${partNameOf(d, 'wheel')} ${wt.id === 'solid' ? '' : `${wt.name} `}바퀴`)
+  parts.push(`${partNameOf(d, 'truck')} 트럭`)
   parts.push(patternOf(d.pattern).name)
   if (d.drawing?.length) parts.push('직접 그림')
+  if (d.stickers?.length) parts.push(`사진·이모지 ${d.stickers.length}개`)
   parts.push(d.phrase ? `문구 "${d.phrase}"` : '문구 없음')
+  if (d.coating) parts.push('보호 코팅')
+  if (d.clearGrip) parts.push('클리어 그립테이프')
+  const extras = EXTRAS.filter((e) => d.extras?.includes(e.id)).map((e) => e.name)
+  if (extras.length) parts.push(`추가 ${extras.join(', ')}`)
   return parts.join(' · ')
 }
 
@@ -57,13 +77,14 @@ export function boardName(d) {
 export function topAlt(d) {
   const bits = [`${deckNameOf(d)} 덱`, `${patternOf(d.pattern).name} 무늬`]
   if (d.drawing?.length) bits.push('직접 그린 그림')
+  if (d.stickers?.length) bits.push('사진·이모지')
   if (d.phrase) bits.push(`${fontOf(d.font).name} 스타일 ${d.phrase} 문구`)
-  bits.push(`${colorOf('wheel', d.wheel).name} 바퀴`)
+  bits.push(`${partNameOf(d, 'wheel')} 바퀴`)
   return `${bits.join(', ')} 보드의 윗면`
 }
 
 export function sideAlt(d) {
-  return `${deckNameOf(d)} 덱, ${colorOf('truck', d.truck).name} 트럭, ${colorOf('wheel', d.wheel).name} 바퀴 보드의 옆모습`
+  return `${deckNameOf(d)} 덱, ${partNameOf(d, 'truck')} 트럭, ${partNameOf(d, 'wheel')} ${wheelTypeOf(d).name} 바퀴 보드의 옆모습`
 }
 
 // 확인용 예시 추천 규칙 ([미정]) — site/js/app.js 1차 구현과 같음

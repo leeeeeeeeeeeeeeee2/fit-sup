@@ -47,7 +47,7 @@ export default function Header() {
             </li>
             <li>
               {loggedIn ? (
-                <button data-id="M05" type="button" className="gnb__login" onClick={logout}>
+                <button data-id="M05" type="button" className="gnb__login gnb__login--out" onClick={logout}>
                   <span className="m-only gnb__icon" aria-hidden="true"><LogOut /></span>
                   로그아웃
                 </button>

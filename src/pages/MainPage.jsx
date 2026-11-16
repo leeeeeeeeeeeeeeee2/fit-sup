@@ -4,6 +4,11 @@ import { ArrowRight } from '../components/Icons.jsx'
 import { STYLES } from '../data/options.js'
 import './MainPage.css'
 
+// 히어로 영상: src/assets/main/hero.mp4 (또는 .webm/.mov)를 넣으면 보드 그림 대신 재생
+const HERO_VIDEO = Object.values(
+  import.meta.glob('../assets/main/hero.{mp4,webm,mov}', { eager: true, query: '?url', import: 'default' }),
+)[0]
+
 const FLOW = [
   {
     no: '01',
@@ -24,11 +29,13 @@ export default function MainPage() {
         <div className="hero__text">
           <span className="chip">크루저 보드 · 22 / 27 / 32인치</span>
           <h1 id="hero-title" className="hero__title">
-            핏썹?
-            <br />
-            사이즈는 딱 맞게,
-            <br />
-            디자인은 내 맘대로.
+            <span className="hero__brand">핏썹?</span>
+            <span className="hero__line">
+              사이즈는 <mark className="hero__fit">딱 맞게,</mark>
+            </span>
+            <span className="hero__line">
+              디자인은 <span className="hero__free">내 맘대로.</span>
+            </span>
           </h1>
           <p className="hero__desc">
             어떻게 탈지 고르고, 키와 신발 사이즈를 넣으면 맞는 길이를 찾아 드려요.
@@ -41,10 +48,16 @@ export default function MainPage() {
           </Link>
         </div>
         <figure className="hero__figure">
-          <div className="hero__board-box">
-            <HeroBoard />
+          <div className={`hero__board-box${HERO_VIDEO ? ' hero__board-box--video' : ''}`}>
+            {HERO_VIDEO ? (
+              <video className="hero__video" src={HERO_VIDEO} autoPlay muted loop playsInline aria-label="핏썹 보드 라이딩 영상" />
+            ) : (
+              <HeroBoard />
+            )}
           </div>
-          <figcaption className="caption">미리보기 예시 · 27인치 · 블루 덱 · 화이트 바퀴 · FIT'SUP</figcaption>
+          {!HERO_VIDEO && (
+            <figcaption className="caption">미리보기 예시 · 27인치 · 블루 덱 · 화이트 바퀴 · FIT'SUP</figcaption>
+          )}
         </figure>
       </section>
 

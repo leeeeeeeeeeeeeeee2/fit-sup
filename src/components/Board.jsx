@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import { colorOf, deckHexOf, fontOf, sideAlt, topAlt } from '../lib/design.js'
+import { deckHexOf, fontOf, partHexOf, sideAlt, topAlt, wheelTypeOf } from '../lib/design.js'
 import { DRAW_H, DRAW_W, strokePath } from '../lib/drawing.js'
 
 const INK = '#111311'
@@ -89,9 +89,9 @@ function DeckShape({ x, y, w, h, rx, color, pattern, cell, stripe, strokeWidth, 
  * drawing: [{ color, width, points: [[x, y], ...] }] — 좌표는 DRAW_W × DRAW_H 기준
  * 그림이 없으면 아무것도 그리지 않음 (기존 화면 그대로)
  */
-function DeckDrawing({ x, y, w, h, rx, drawing }) {
+function DeckDrawing({ x, y, w, h, rx, drawing, stickers }) {
   const id = useSvgId('draw')
-  if (!drawing?.length) return null
+  if (!drawing?.length && !stickers?.length) return null
   return (
     <>
       <defs>
@@ -101,7 +101,7 @@ function DeckDrawing({ x, y, w, h, rx, drawing }) {
       </defs>
       <g clipPath={`url(#${id})`}>
         <g transform={`translate(${x} ${y}) scale(${w / DRAW_W} ${h / DRAW_H})`}>
-          {drawing.map((s, i) => (
+          {drawing?.map((s, i) => (
             <path
               key={i}
               d={strokePath(s.points)}
@@ -112,10 +112,37 @@ function DeckDrawing({ x, y, w, h, rx, drawing }) {
               strokeLinejoin="round"
             />
           ))}
+          {stickers?.map((st) => (
+            <Sticker key={st.id} sticker={st} />
+          ))}
         </g>
       </g>
     </>
   )
+}
+
+/**
+ * 사진·이모지 한 개 (좌표는 DRAW_W × DRAW_H 기준, x·y는 가운데, size는 높이)
+ */
+export function Sticker({ sticker: st }) {
+  if (st.kind === 'emoji') {
+    return (
+      <text x={st.x} y={st.y} fontSize={st.size} textAnchor="middle" dominantBaseline="central">
+        {st.value}
+      </text>
+    )
+  }
+  const h = st.size
+  const w = st.size * (st.ratio || 1)
+  return <image href={st.value} x={st.x - w / 2} y={st.y - h / 2} width={w} height={h} preserveAspectRatio="xMidYMid meet" />
+}
+
+// 바퀴 종류에 따른 윗면 바퀴 모양 (와이드는 더 두껍게, 클리어는 반투명)
+function wheelLook(design, base) {
+  const type = wheelTypeOf(design).id
+  const fill = partHexOf(design, 'wheel')
+  const look = { ...base, fill, fillOpacity: type === 'clear' ? 0.5 : 1 }
+  return { look, grow: type === 'wide' ? base.height * 0.3 : 0 }
 }
 
 // 그리기 창(J)의 바탕: 덱 윗면만 DRAW_W × DRAW_H 크기로 그림
@@ -139,9 +166,9 @@ export function DeckCanvasBase({ design }) {
 
 // 덱 윗면 미리보기 (600×220)
 export function BoardTop({ design, svgRef, label }) {
-  const wheel = colorOf('wheel', design.wheel).hex
   const font = fontOf(design.font)
-  const wheelRect = { width: 44, height: 28, rx: 9, fill: wheel, stroke: INK, strokeWidth: 4 }
+  const { look, grow } = wheelLook(design, { width: 44, height: 28, rx: 9, stroke: INK, strokeWidth: 4 })
+  const wheelRect = { ...look, height: look.height + grow }
   return (
     <svg
       ref={svgRef}
@@ -151,9 +178,9 @@ export function BoardTop({ design, svgRef, label }) {
       role="img"
       aria-label={label ?? topAlt(design)}
     >
-      <rect x="100" y="20" {...wheelRect} />
+      <rect x="100" y={20 - grow} {...wheelRect} />
       <rect x="100" y="172" {...wheelRect} />
-      <rect x="456" y="20" {...wheelRect} />
+      <rect x="456" y={20 - grow} {...wheelRect} />
       <rect x="456" y="172" {...wheelRect} />
       <DeckShape
         x={20}
@@ -168,7 +195,7 @@ export function BoardTop({ design, svgRef, label }) {
         strokeWidth={5}
         flameStroke={4}
       />
-      <DeckDrawing x={20} y={38} w={560} h={144} rx={72} drawing={design.drawing} />
+      <DeckDrawing x={20} y={38} w={560} h={144} rx={72} drawing={design.drawing} stickers={design.stickers} />
       {design.phrase && (
         <text
           x="300"
@@ -192,8 +219,10 @@ export function BoardTop({ design, svgRef, label }) {
 
 // 옆모습 미리보기 (600×140)
 export function BoardSide({ design }) {
-  const wheel = colorOf('wheel', design.wheel).hex
-  const truck = colorOf('truck', design.truck).hex
+  const wheel = partHexOf(design, 'wheel')
+  const truck = partHexOf(design, 'truck')
+  const type = wheelTypeOf(design).id
+  const clipId = useSvgId('wheel')
   return (
     <svg width="100%" viewBox="0 0 600 140" role="img" aria-label={sideAlt(design)}>
       <rect x="20" y="24" width="560" height="18" rx="9" fill={deckHexOf(design)} stroke={INK} strokeWidth="4" />
@@ -211,7 +240,32 @@ export function BoardSide({ design }) {
       ))}
       {[120, 480].map((cx) => (
         <g key={cx}>
-          <circle cx={cx} cy="98" r="28" fill={wheel} stroke={INK} strokeWidth="4" />
+          <circle cx={cx} cy="98" r="28" fill={wheel} fillOpacity={type === 'clear' ? 0.5 : 1} stroke={INK} strokeWidth="4" />
+          {type === 'graphic' &&
+            (design.wheelGraphic ? (
+              <>
+                <defs>
+                  <clipPath id={`${clipId}-${cx}`}>
+                    <circle cx={cx} cy="98" r="24" />
+                  </clipPath>
+                </defs>
+                <image
+                  href={design.wheelGraphic}
+                  x={cx - 24}
+                  y="74"
+                  width="48"
+                  height="48"
+                  preserveAspectRatio="xMidYMid slice"
+                  clipPath={`url(#${clipId}-${cx})`}
+                />
+              </>
+            ) : (
+              <>
+                <circle cx={cx} cy="98" r="19" fill="none" stroke="#FF6F5E" strokeWidth="6" strokeDasharray="8 5" />
+                <circle cx={cx} cy="98" r="13" fill="none" stroke="#1E3FD0" strokeWidth="3" />
+              </>
+            ))}
+          {type === 'wide' && <circle cx={cx} cy="98" r="22" fill="none" stroke={INK} strokeWidth="2" strokeOpacity="0.5" />}
           <circle cx={cx} cy="98" r="8" fill={WHITE} stroke={INK} strokeWidth="3" />
         </g>
       ))}
@@ -221,14 +275,14 @@ export function BoardSide({ design }) {
 
 // 목록 행·카드의 작은 윗면 그림 (150×60)
 export function BoardThumb({ design, width = 150, height = 60, label }) {
-  const wheel = colorOf('wheel', design.wheel).hex
   const font = fontOf(design.font)
-  const wheelRect = { width: 16, height: 10, rx: 4, fill: wheel, stroke: INK, strokeWidth: 2.5 }
+  const { look, grow } = wheelLook(design, { width: 16, height: 10, rx: 4, stroke: INK, strokeWidth: 2.5 })
+  const wheelRect = { ...look, height: look.height + grow }
   return (
     <svg width={width} height={height} viewBox="0 0 150 60" role="img" aria-label={label ?? topAlt(design)}>
-      <rect x="26" y="4" {...wheelRect} />
+      <rect x="26" y={4 - grow} {...wheelRect} />
       <rect x="26" y="46" {...wheelRect} />
-      <rect x="108" y="4" {...wheelRect} />
+      <rect x="108" y={4 - grow} {...wheelRect} />
       <rect x="108" y="46" {...wheelRect} />
       <DeckShape
         x={3}
@@ -243,7 +297,7 @@ export function BoardThumb({ design, width = 150, height = 60, label }) {
         strokeWidth={3}
         flameStroke={1.2}
       />
-      <DeckDrawing x={3} y={11} w={144} h={38} rx={19} drawing={design.drawing} />
+      <DeckDrawing x={3} y={11} w={144} h={38} rx={19} drawing={design.drawing} stickers={design.stickers} />
       {design.phrase && (
         <text
           x="75"

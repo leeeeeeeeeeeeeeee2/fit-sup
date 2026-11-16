@@ -1,11 +1,23 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { BoardSide, BoardTop, LengthBoard, PatternSwatch } from '../components/Board.jsx'
+import WheelSection, { ExtrasSection } from '../components/WheelSection.jsx'
 import ImageModal from '../components/ImageModal.jsx'
 import DrawSheet from '../components/DrawSheet.jsx'
 import { Alert, ArrowDown, Info, Pencil } from '../components/Icons.jsx'
-import { COLORS, FONTS, LENGTHS, PARTS, PATTERNS, PHRASE_MAX, SHOE_SIZES, STYLES } from '../data/options.js'
-import { HEX_RE, deckHexOf, describe, eunNeun, recommend } from '../lib/design.js'
+import {
+  COLORS,
+  DECK_OPTIONS,
+  FONTS,
+  LENGTHS,
+  PARTS,
+  PATTERNS,
+  PHRASE_MAX,
+  SHOE_SIZES,
+  STYLES,
+} from '../data/options.js'
+import { HEX_RE, deckHexOf, describe, eunNeun, partHexOf, recommend } from '../lib/design.js'
+import { plusWon, priceOf, won } from '../lib/price.js'
 import { useStore } from '../store/StoreContext.jsx'
 import './BuildPage.css'
 
@@ -29,6 +41,7 @@ function scrollToId(id) {
 // P02 보드 만들기
 export default function BuildPage() {
   const { draft, updateDraft, addToCart, saveDesign, loggedIn, setPending, showToast } = useStore()
+  const price = priceOf(draft)
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -38,11 +51,12 @@ export default function BuildPage() {
   const [rec, setRec] = useState(null)
   const [step, setStep] = useState(1)
   const [part, setPart] = useState('deck')
-  const [hexInput, setHexInput] = useState(draft.deckHex)
+  // 부품별 직접 입력 중인 색 코드 (6자리가 되기 전 값도 보여 주려고 따로 보관)
+  const [hexInputs, setHexInputs] = useState({ deck: draft.deckHex, wheel: draft.wheelHex, truck: draft.truckHex })
   const [modalOpen, setModalOpen] = useState(false)
   // 모바일 전용 접기 (데스크톱에서는 버튼이 숨겨져 있어 영향 없음)
   const [sideOpen, setSideOpen] = useState(false)
-  const [hexOpen, setHexOpen] = useState(Boolean(draft.deckHex))
+  const [hexOpen, setHexOpen] = useState(Boolean(draft.deckHex || draft.wheelHex || draft.truckHex))
   // 덱 무늬 '직접 만들기' 그리기 창 (J, 데스크톱 포함)
   const [drawOpen, setDrawOpen] = useState(false)
   const drawBtnRef = useRef(null)
@@ -50,12 +64,11 @@ export default function BuildPage() {
     setDrawOpen(false)
     requestAnimationFrame(() => drawBtnRef.current?.focus())
   }, [])
-  const applyDraw = (drawing) => {
-    updateDraft({ drawing })
+  const applyDraw = ({ drawing, stickers }) => {
+    updateDraft({ drawing, stickers })
     closeDraw()
   }
 
-  const lengthCardsRef = useRef(null)
   const imageBtnRef = useRef(null)
 
   // 메인에서 고른 스타일, 로그인 후 이어서 할 일, 주소의 #섹션 처리
@@ -71,6 +84,10 @@ export default function BuildPage() {
       showToast(SAVE_TOAST)
     }
     if (st?.resume === 'image') setModalOpen(true)
+    if (st?.resume === 'cart') {
+      addToCart(draft)
+      showToast(CART_TOAST)
+    }
     if (location.hash) {
       const id = location.hash.slice(1)
       if (id === 'S02-3') setStep(2)
@@ -109,34 +126,33 @@ export default function BuildPage() {
     updateDraft({ length: r.length })
   }
 
-  const onSkip = () => {
-    setRec(null)
-    setErrors({})
-    lengthCardsRef.current?.querySelector('button')?.focus()
-  }
-
   const goDesign = () => {
     setStep(2)
     scrollToId('S02-3')
     document.getElementById('design-title')?.focus({ preventScroll: true })
   }
 
-  const onHexChange = (e) => {
-    const v = e.target.value.toUpperCase().replace(/[^0-9A-F]/g, '').slice(0, 6)
-    setHexInput(v)
-    updateDraft({ deckHex: HEX_RE.test(v) ? v : '' })
+  const hexKey = `${part}Hex`
+  const hexInput = hexInputs[part] ?? ''
+
+  const setHex = (raw) => {
+    const v = raw.toUpperCase().replace(/[^0-9A-F]/g, '').slice(0, 6)
+    setHexInputs((m) => ({ ...m, [part]: v }))
+    updateDraft({ [hexKey]: HEX_RE.test(v) ? v : '' })
   }
 
   const pickColor = (id) => {
-    if (part === 'deck') {
-      setHexInput('')
-      updateDraft({ deck: id, deckHex: '' })
-    } else {
-      updateDraft({ [part]: id })
-    }
+    setHexInputs((m) => ({ ...m, [part]: '' }))
+    updateDraft({ [part]: id, [hexKey]: '' })
   }
 
+  // 장바구니 담기도 로그인이 필요 (로그인 후 돌아와서 이어서 담음)
   const onAddCart = () => {
+    if (!loggedIn) {
+      setPending('cart')
+      navigate('/login')
+      return
+    }
     addToCart(draft)
     showToast(CART_TOAST)
   }
@@ -166,8 +182,9 @@ export default function BuildPage() {
   }, [])
 
   const spec = describe(draft)
+  const hasCustom = draft.drawing?.length > 0 || draft.stickers?.length > 0
   const currentPart = PARTS.find((p) => p.id === part)
-  const selectedColor = part === 'deck' && draft.deckHex ? null : draft[part]
+  const selectedColor = draft[hexKey] ? null : draft[part]
 
   return (
     <div data-id="P02" className="page">
@@ -268,9 +285,6 @@ export default function BuildPage() {
             <button data-id="B02-1" type="button" className="btn btn--md" onClick={onRecommend}>
               내 길이 추천받기
             </button>
-            <button data-id="B02-2" type="button" className="btn-text" onClick={onSkip}>
-              추천 건너뛰기
-            </button>
           </div>
 
           <div role="status">
@@ -290,7 +304,7 @@ export default function BuildPage() {
             <legend>
               길이 고르기 <span className="muted">(선택)</span>
             </legend>
-            <div className="pick-grid pick-grid--lengths" ref={lengthCardsRef}>
+            <div className="pick-grid pick-grid--lengths">
               {LENGTHS.map((l) => {
                 const on = draft.length === l.value
                 return (
@@ -308,6 +322,7 @@ export default function BuildPage() {
                     <span className="length-card__img">
                       <LengthBoard length={l.value} />
                     </span>
+                    <span className="length-card__price">{won(l.price)}</span>
                     <span className="length-card__strong">{l.strong}</span>
                     <span className="length-card__desc">{l.desc}</span>
                   </button>
@@ -378,6 +393,7 @@ export default function BuildPage() {
                     onClick={() => updateDraft({ length: l.value })}
                   >
                     {l.value}인치
+                    <span className="segment__price">{won(l.price)}</span>
                   </button>
                 ))}
               </div>
@@ -431,43 +447,46 @@ export default function BuildPage() {
                       )
                     })}
                   </div>
-                  {part === 'deck' && (
-                    <button
-                      type="button"
-                      className="m-only m-toggle m-toggle--hex"
-                      aria-expanded={hexOpen}
-                      onClick={() => setHexOpen((v) => !v)}
-                    >
-                      {hexOpen ? '직접 입력 접기' : '직접 입력'}
-                    </button>
-                  )}
-                  {part === 'deck' && (
-                    <div className="hex">
-                      <label htmlFor="deck-hex">직접 입력</label>
-                      <div className="hex__row">
-                        <span
-                          aria-hidden="true"
-                          className={`hex__dot${draft.deckHex ? ' is-on' : ''}`}
-                          style={draft.deckHex ? { background: deckHexOf(draft) } : undefined}
+                  <button
+                    type="button"
+                    className="m-only m-toggle m-toggle--hex"
+                    aria-expanded={hexOpen}
+                    onClick={() => setHexOpen((v) => !v)}
+                  >
+                    {hexOpen ? '색 직접 지정 접기' : '색 직접 지정하기'}
+                  </button>
+                  <div className="hex">
+                    <label htmlFor="part-hex">색 직접 지정하기</label>
+                    <div className="hex__row">
+                      <label
+                        className={`hex__dot hex__picker${draft[hexKey] ? ' is-on' : ''}`}
+                        style={draft[hexKey] ? { background: partHexOf(draft, part) } : undefined}
+                        title="색 고르기"
+                      >
+                        <input
+                          type="color"
+                          aria-label={`${currentPart.name} 색 고르기`}
+                          value={partHexOf(draft, part).toLowerCase()}
+                          onChange={(e) => setHex(e.target.value.slice(1))}
                         />
-                        <div className="hex__field">
-                          <span aria-hidden="true">#</span>
-                          <input
-                            id="deck-hex"
-                            type="text"
-                            maxLength={6}
-                            placeholder="1E3FD0"
-                            value={hexInput}
-                            aria-describedby="deck-hex-help"
-                            onChange={onHexChange}
-                          />
-                        </div>
+                      </label>
+                      <div className="hex__field">
+                        <span aria-hidden="true">#</span>
+                        <input
+                          id="part-hex"
+                          type="text"
+                          maxLength={6}
+                          placeholder="1E3FD0"
+                          value={hexInput}
+                          aria-describedby="part-hex-help"
+                          onChange={(e) => setHex(e.target.value)}
+                        />
                       </div>
-                      <p id="deck-hex-help" className="small-help">
-                        원하는 색의 6자리 코드를 입력해 주세요 · 예: 1E3FD0
-                      </p>
                     </div>
-                  )}
+                    <p id="part-hex-help" className="small-help">
+                      동그라미를 눌러 색을 고르거나 6자리 코드를 입력해 주세요 · 예: 1E3FD0
+                    </p>
+                  </div>
                 </fieldset>
 
                 {part === 'deck' && (
@@ -494,15 +513,15 @@ export default function BuildPage() {
                         <button
                           ref={drawBtnRef}
                           type="button"
-                          aria-pressed={draft.drawing?.length > 0}
-                          aria-label="덱 무늬 직접 만들기"
-                          className={`tile tile--dashed${draft.drawing?.length ? ' is-on' : ''}`}
+                          aria-pressed={hasCustom}
+                          aria-label="덱 무늬 직접 만들기 (그림·사진·이모지)"
+                          className={`tile tile--dashed${hasCustom ? ' is-on' : ''}`}
                           onClick={() => setDrawOpen(true)}
                         >
                           <span aria-hidden="true" className="tile__icon">
                             <Pencil />
                           </span>
-                          {draft.drawing?.length ? '직접 만들기 ✓' : '직접 만들기'}
+                          {hasCustom ? '직접 만들기 ✓' : '직접 만들기'}
                         </button>
                       </div>
                     </fieldset>
@@ -551,6 +570,28 @@ export default function BuildPage() {
                         })}
                       </div>
                     </fieldset>
+
+                    <fieldset className="field-group">
+                      <legend>
+                        덱 옵션 <span className="muted">(선택)</span>
+                      </legend>
+                      <div className="opt-checks">
+                        {DECK_OPTIONS.map((o) => (
+                          <label key={o.id} className={`opt-check${draft[o.id] ? ' is-on' : ''}`}>
+                            <input
+                              type="checkbox"
+                              checked={Boolean(draft[o.id])}
+                              onChange={(e) => updateDraft({ [o.id]: e.target.checked })}
+                            />
+                            <span className="opt-check__name">
+                              {o.name}
+                              {o.recommended && <span className="chip chip--ink opt-check__chip">추천</span>}
+                            </span>
+                            <span className="opt-check__price">{plusWon(o.price)}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </fieldset>
                   </>
                 )}
               </div>
@@ -559,6 +600,9 @@ export default function BuildPage() {
         </div>
       </section>
 
+      <WheelSection draft={draft} updateDraft={updateDraft} />
+      <ExtrasSection draft={draft} updateDraft={updateDraft} />
+
       <section data-id="S02-4" aria-labelledby="price-title" className="band band--surface band--top-line">
         <div className="container price">
           <div className="price__summary">
@@ -566,7 +610,17 @@ export default function BuildPage() {
               선택한 구성과 가격을 확인해 주세요
             </h2>
             <p className="price__spec">{spec}</p>
-            <p className="price__amount">가격 미정</p>
+            <dl className="price__lines">
+              {price.lines.map((l, i) => (
+                <div key={l.label} className="price__line">
+                  <dt>{l.label}</dt>
+                  <dd>{i === 0 ? won(l.amount) : plusWon(l.amount)}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="price__amount" aria-live="polite">
+              합계 {won(price.total)}
+            </p>
           </div>
           <div className="price__actions">
             <button data-id="B02-4" type="button" className="btn btn--primary btn--block" onClick={onAddCart}>
@@ -580,7 +634,7 @@ export default function BuildPage() {
                 이미지 저장
               </button>
             </div>
-            <p className="small-help">디자인 저장과 이미지 저장은 로그인이 필요해요.</p>
+            <p className="small-help">장바구니 담기, 디자인 저장, 이미지 저장은 로그인하면 이용할 수 있어요.</p>
           </div>
         </div>
       </section>

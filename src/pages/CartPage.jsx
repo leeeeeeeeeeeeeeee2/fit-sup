@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import BoardListItem from '../components/BoardListItem.jsx'
 import { ArrowRight } from '../components/Icons.jsx'
+import { cartTotal, won } from '../lib/price.js'
 import { useStore } from '../store/StoreContext.jsx'
 import './OrderPages.css'
 
@@ -37,8 +38,7 @@ export default function CartPage() {
               주문 요약
             </h2>
             <p>
-              주문 예정 보드 {n}개 · 상품 금액은 가격 확정 후 표시돼요. 배송비를 포함한 최종 금액은 주문 단계에서 확인해
-              주세요.
+              주문 예정 보드 {n}개 · 상품 금액 합계 <strong>{won(cartTotal(cart))}</strong>
             </p>
           </div>
           {n ? (
