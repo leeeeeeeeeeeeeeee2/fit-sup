@@ -805,13 +805,6 @@
   border: 0;
 }
 
-/* S01-4 예시 정책 표시 */
-.check__note {
-  margin-top: 10px;
-  font-size: 12px;
-  opacity: 0.85;
-}
-
 /* P03 장바구니 수량 (1~5개) */
 .qty {
   flex: none;

@@ -229,8 +229,8 @@ export default function MainPage() {
           </div>
 
           <p className="spec-note">
-            <strong>상세 사양 안내 예정</strong>
-            소재·적층 수·최대 하중·내구성 시험 결과·품질 보증은 확인 후 안내해요.
+            <strong>상세 사양</strong>
+            캐나다 메이플 7겹 · 최대 하중 100kg · 품질 보증 6개월 (체험용 예시 사양)
           </p>
         </div>
       </section>
@@ -249,7 +249,6 @@ export default function MainPage() {
               </li>
             ))}
           </ul>
-          <p className="check__note">체험용 사이트의 예시 정책이에요.</p>
         </div>
       </section>
     </div>
