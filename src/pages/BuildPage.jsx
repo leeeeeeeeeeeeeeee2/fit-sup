@@ -4,7 +4,8 @@ import { BoardSide, BoardTop, LengthBoard, PatternSwatch } from '../components/B
 import WheelSection, { ExtrasSection } from '../components/WheelSection.jsx'
 import ImageModal from '../components/ImageModal.jsx'
 import DrawSheet from '../components/DrawSheet.jsx'
-import { Alert, ArrowDown, Info, Pencil } from '../components/Icons.jsx'
+import LoginModal from '../components/LoginModal.jsx'
+import { Alert, ArrowDown, ArrowRight, Info, Pencil } from '../components/Icons.jsx'
 import {
   COLORS,
   DECK_OPTIONS,
@@ -40,7 +41,7 @@ function scrollToId(id) {
 
 // P02 보드 만들기
 export default function BuildPage() {
-  const { draft, updateDraft, addToCart, saveDesign, loggedIn, setPending, showToast } = useStore()
+  const { draft, updateDraft, addToCart, saveDesign, loggedIn, setPending, showToast, startBuyNow } = useStore()
   const price = priceOf(draft)
   const location = useLocation()
   const navigate = useNavigate()
@@ -70,6 +71,9 @@ export default function BuildPage() {
   }
 
   const imageBtnRef = useRef(null)
+  // 주문하기(바로 결제): 로그인하지 않았으면 이 자리에서 로그인 창을 띄움
+  const [buyLoginOpen, setBuyLoginOpen] = useState(false)
+  const buyBtnRef = useRef(null)
 
   // 메인에서 고른 스타일, 로그인 후 이어서 할 일, 주소의 #섹션 처리
   const handledKey = useRef(null)
@@ -152,6 +156,25 @@ export default function BuildPage() {
     addToCart(draft)
     showToast(CART_TOAST)
   }
+
+  // 주문하기(바로 결제): 장바구니에 담지 않고 지금 만든 보드만 주문·결제로 보냄
+  const goBuyNow = () => {
+    startBuyNow(draft)
+    navigate('/checkout', { state: { now: true } })
+  }
+
+  const onBuyNow = () => {
+    if (!loggedIn) {
+      setBuyLoginOpen(true)
+      return
+    }
+    goBuyNow()
+  }
+
+  const closeBuyLogin = useCallback(() => {
+    setBuyLoginOpen(false)
+    requestAnimationFrame(() => buyBtnRef.current?.focus())
+  }, [])
 
   const onSave = () => {
     if (!loggedIn) {
@@ -619,9 +642,21 @@ export default function BuildPage() {
             </p>
           </div>
           <div className="price__actions">
-            <button data-id="B02-4" type="button" className="btn btn--primary btn--block" onClick={onAddCart}>
-              장바구니 담기
-            </button>
+            <div className="price__main">
+              <button data-id="B02-4" type="button" className="btn btn--primary btn--block" onClick={onAddCart}>
+                장바구니 담기
+              </button>
+              <button
+                data-id="B02-12"
+                ref={buyBtnRef}
+                type="button"
+                className="btn btn--primary btn--block"
+                onClick={onBuyNow}
+              >
+                주문하기
+                <ArrowRight />
+              </button>
+            </div>
             <div className="price__sub">
               <button data-id="B02-5" type="button" className="btn btn--md" onClick={onSave}>
                 디자인 저장
@@ -630,13 +665,21 @@ export default function BuildPage() {
                 이미지 저장
               </button>
             </div>
-            <p className="small-help">장바구니 담기, 디자인 저장, 이미지 저장은 로그인하면 이용할 수 있어요.</p>
+            <p className="small-help">장바구니 담기, 주문하기, 디자인 저장, 이미지 저장은 로그인하면 이용할 수 있어요.</p>
           </div>
         </div>
       </section>
 
       {modalOpen && <ImageModal design={draft} onClose={closeModal} />}
       {drawOpen && <DrawSheet design={draft} onApply={applyDraw} onClose={closeDraw} />}
+      {buyLoginOpen && (
+        <LoginModal
+          notice="주문·결제는 로그인하면 가능해요. 만들던 디자인은 그대로 남아 있어요."
+          doneLabel="이어서 주문하기"
+          onDone={goBuyNow}
+          onClose={closeBuyLogin}
+        />
+      )}
     </div>
   )
 }

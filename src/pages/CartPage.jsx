@@ -1,14 +1,25 @@
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import BoardListItem from '../components/BoardListItem.jsx'
 import { ArrowRight } from '../components/Icons.jsx'
+import LoginModal from '../components/LoginModal.jsx'
 import { cartTotal, won } from '../lib/price.js'
 import { useStore } from '../store/StoreContext.jsx'
 import './OrderPages.css'
 
 // P03 장바구니
 export default function CartPage() {
-  const { cart, removeFromCart } = useStore()
+  const { cart, removeFromCart, loggedIn } = useStore()
+  const navigate = useNavigate()
+  const [loginOpen, setLoginOpen] = useState(false)
   const n = cart.length
+
+  // 주문·결제는 로그인이 필요: 이 자리에서 로그인 창을 띄우고, 완료하면 주문·결제로 이어서 감
+  const onOrder = (e) => {
+    if (loggedIn) return
+    e.preventDefault()
+    setLoginOpen(true)
+  }
 
   return (
     <div data-id="P03" className="page">
@@ -42,7 +53,7 @@ export default function CartPage() {
             </p>
           </div>
           {n ? (
-            <Link data-id="B03-2" to="/checkout" className="btn btn--primary">
+            <Link data-id="B03-2" to="/checkout" className="btn btn--primary" onClick={onOrder}>
               주문하기
               <ArrowRight />
             </Link>
@@ -54,6 +65,14 @@ export default function CartPage() {
           )}
         </section>
       </main>
+      {loginOpen && (
+        <LoginModal
+          notice="주문·결제는 로그인하면 가능해요. 담은 보드는 그대로 남아 있어요."
+          doneLabel="이어서 주문하기"
+          onDone={() => navigate('/checkout')}
+          onClose={() => setLoginOpen(false)}
+        />
+      )}
     </div>
   )
 }

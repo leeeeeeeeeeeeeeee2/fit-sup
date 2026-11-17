@@ -11,6 +11,7 @@ const INITIAL = {
   designs: [],
   loggedIn: false,
   pending: null, // 로그인하러 가기 전에 하던 일: 'save' | 'image' | 'cart' | 'review'
+  buyNow: null, // 주문하기(바로 결제)로 고른 보드 { id, design } — 장바구니와 따로 결제
   lastOrderCount: 0,
   lastOrder: null, // { count, total, payLabel }
   myReviews: [], // 내가 쓴 리뷰
@@ -71,8 +72,15 @@ export function StoreProvider({ children }) {
       addToCart: (design) =>
         setState((s) => ({ ...s, cart: [...s.cart, { id: newId(), design: { ...design } }] })),
       removeFromCart: (id) => setState((s) => ({ ...s, cart: s.cart.filter((it) => it.id !== id) })),
-      completeOrder: (order) =>
-        setState((s) => ({ ...s, lastOrderCount: s.cart.length, lastOrder: order ?? null, cart: [] })),
+      // 주문하기(바로 결제): 장바구니에 담지 않고 이 보드만 결제
+      startBuyNow: (design) => setState((s) => ({ ...s, buyNow: { id: newId(), design: { ...design } } })),
+      // now: 바로 결제였으면 장바구니는 그대로 두고 바로 결제 보드만 비움
+      completeOrder: (order, { now = false } = {}) =>
+        setState((s) =>
+          now
+            ? { ...s, lastOrderCount: 1, lastOrder: order ?? null, buyNow: null }
+            : { ...s, lastOrderCount: s.cart.length, lastOrder: order ?? null, cart: [] },
+        ),
       addReview: (review) => setState((s) => ({ ...s, myReviews: [{ id: newId(), ...review }, ...s.myReviews] })),
       toggleHelped: (id) =>
         setState((s) => ({

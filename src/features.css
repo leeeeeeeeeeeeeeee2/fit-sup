@@ -740,3 +740,54 @@
     width: auto;
   }
 }
+
+/* 로그인 창 · 로그인 완료 창 (LoginModal — 장바구니·결제·보드 만들기·로그인 페이지 공통) */
+.login-dialog {
+  width: min(460px, 100%);
+}
+
+.login-dialog__notice {
+  align-items: flex-start;
+  margin-bottom: 16px;
+  padding: 10px 16px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.login-dialog__notice svg {
+  flex: none;
+  margin-top: 2px;
+}
+
+.login-dialog__done {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0 4px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.3;
+}
+
+.login-dialog__done svg {
+  flex: none;
+  color: var(--brand);
+}
+
+/* P02 가격 요약: 장바구니 담기 + 주문하기(바로 결제) */
+.price__main {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.price__main .btn--primary {
+  padding: 0 16px;
+}
+
+@media (max-width: 599px) {
+  .price__main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import BoardListItem from '../components/BoardListItem.jsx'
+import LoginModal from '../components/LoginModal.jsx'
 import { Alert } from '../components/Icons.jsx'
 import { cartTotal, won } from '../lib/price.js'
 import { useStore } from '../store/StoreContext.jsx'
@@ -79,22 +80,32 @@ function Field({ id, label, type = 'text', placeholder, value, error, onChange, 
 
 // P04 주문·결제
 export default function CheckoutPage() {
-  const { cart, completeOrder } = useStore()
+  const { cart, buyNow, loggedIn, completeOrder } = useStore()
   const navigate = useNavigate()
+  const location = useLocation()
+  // 주문하기(바로 결제)로 왔으면 그 보드 하나만, 아니면 장바구니 전체를 결제
+  const now = Boolean(location.state?.now && buyNow)
+  const items = now ? [buyNow] : cart
   // 카드 정보는 이 화면 안에서만 쓰고 저장하지 않음
   const [form, setForm] = useState({ rcv: '', tel: '', addr: '', cardNo: '', cardExp: '', cardCvc: '', bank: '', payer: '' })
   const [method, setMethod] = useState('card')
   const [errors, setErrors] = useState({})
   // 결제 직후 장바구니가 비어도 장바구니로 돌려보내지 않게 표시
   const [paid, setPaid] = useState(false)
-  const n = cart.length
-  const total = cartTotal(cart)
+  // 로그인 창: 로그인하지 않은 동안(들어올 때·결제 중 로그아웃) 늘 띄움
+  // 로그인한 뒤에는 완료 창을 닫을 때까지 띄워 둠
+  const [loginDone, setLoginDone] = useState(false)
+  const loginOpen = !loggedIn || loginDone
+  const n = items.length
+  const total = cartTotal(items)
 
   if (!n && !paid) return <Navigate to="/cart" replace />
 
   const set = (key) => (v) => setForm((f) => ({ ...f, [key]: v }))
 
   const onPay = () => {
+    // 로그인하지 않으면 결제하지 않음 (이때는 로그인 창이 떠 있음)
+    if (!loggedIn) return
     const err = validate(form, method)
     setErrors(err)
     const first = ORDER.find((k) => err[k])
@@ -106,7 +117,7 @@ export default function CheckoutPage() {
       method === 'card' ? `신용·체크카드 (**** ${form.cardNo.replace(/\D/g, '').slice(-4)})` : `실시간 계좌이체 (${form.bank})`
     setPaid(true)
     navigate('/checkout/complete', { replace: true })
-    completeOrder({ count: n, total, payLabel })
+    completeOrder({ count: n, total, payLabel }, { now })
   }
 
   return (
@@ -119,7 +130,7 @@ export default function CheckoutPage() {
             주문할 보드와 구성을 확인해 주세요
           </h2>
           <ul className="board-list">
-            {cart.map((it) => (
+            {items.map((it) => (
               <BoardListItem key={it.id} design={it.design} />
             ))}
           </ul>
@@ -277,6 +288,15 @@ export default function CheckoutPage() {
           </button>
         </section>
       </main>
+      {loginOpen && !paid && (
+        <LoginModal
+          notice="주문·결제는 로그인하면 가능해요. 담은 보드와 입력한 내용은 그대로 남아 있어요."
+          doneLabel="이어서 결제하기"
+          onLoggedIn={() => setLoginDone(true)}
+          onDone={() => setLoginDone(false)}
+          onClose={() => navigate(now ? '/build#S02-4' : '/cart', { replace: true })}
+        />
+      )}
     </div>
   )
 }
