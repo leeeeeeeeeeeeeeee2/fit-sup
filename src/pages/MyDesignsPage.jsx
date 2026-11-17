@@ -1,14 +1,17 @@
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BoardThumb } from '../components/Board.jsx'
-import { Lock } from '../components/Icons.jsx'
+import { Lock, Trash } from '../components/Icons.jsx'
 import { boardName, describe } from '../lib/design.js'
 import { useStore } from '../store/StoreContext.jsx'
 import './OrderPages.css'
 
 // P05 내 디자인 (로그인 필요)
 export default function MyDesignsPage() {
-  const { loggedIn, designs, setDraft, addToCart, showToast } = useStore()
+  const { loggedIn, designs, setDraft, addToCart, removeDesign, showToast } = useStore()
   const navigate = useNavigate()
+  // 삭제 확인 중인 디자인 id (한 번 더 눌러야 지워짐)
+  const [confirmId, setConfirmId] = useState(null)
 
   if (!loggedIn) {
     return (
@@ -82,6 +85,36 @@ export default function MyDesignsPage() {
                         장바구니 담기
                       </button>
                     </div>
+                    {confirmId === id ? (
+                      <p className="design-card__confirm" role="group" aria-label="디자인 삭제 확인">
+                        이 디자인을 지울까요?
+                        <button
+                          type="button"
+                          className="design-card__del is-danger"
+                          onClick={() => {
+                            removeDesign(id)
+                            setConfirmId(null)
+                            showToast({ message: '디자인을 지웠어요.' })
+                          }}
+                        >
+                          지우기
+                        </button>
+                        <button type="button" className="design-card__del" onClick={() => setConfirmId(null)}>
+                          취소
+                        </button>
+                      </p>
+                    ) : (
+                      <button
+                        data-id="B05-4"
+                        type="button"
+                        className="design-card__del design-card__del--start"
+                        aria-label={`${boardName(design)} 디자인 삭제`}
+                        onClick={() => setConfirmId(id)}
+                      >
+                        <Trash size={16} />
+                        삭제
+                      </button>
+                    )}
                   </div>
                 </li>
               ))}

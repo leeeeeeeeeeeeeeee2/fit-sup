@@ -96,6 +96,7 @@ export function StoreProvider({ children }) {
         })),
       saveDesign: (design) =>
         setState((s) => ({ ...s, designs: [...s.designs, { id: newId(), design: { ...design } }] })),
+      removeDesign: (id) => setState((s) => ({ ...s, designs: s.designs.filter((d) => d.id !== id) })),
       login: () => setState((s) => ({ ...s, loggedIn: true })),
       logout: () => setState((s) => ({ ...s, loggedIn: false })),
       setPending: (pending) => setState((s) => ({ ...s, pending })),

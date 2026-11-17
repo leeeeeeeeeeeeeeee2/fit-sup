@@ -488,3 +488,41 @@
   color: var(--ink);
   font-weight: 700;
 }
+
+/* P05 내 디자인 삭제 (B05-4) */
+.design-card__del {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.design-card__del--start {
+  align-self: flex-start;
+  margin-top: 12px;
+}
+
+.design-card__del.is-danger {
+  border-color: #b3261e;
+  background: #b3261e;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.design-card__confirm {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
