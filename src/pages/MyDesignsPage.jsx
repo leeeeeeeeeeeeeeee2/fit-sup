@@ -44,6 +44,8 @@ export default function MyDesignsPage() {
       message: '장바구니에 담았어요.',
       actions: [{ id: 'B02-7', label: '장바구니 보기', to: '/cart' }],
     })
+    // 보드 만들기와 같이 담고 나면 메인으로 부드럽게 넘어감
+    navigate('/', { viewTransition: true })
   }
 
   return (

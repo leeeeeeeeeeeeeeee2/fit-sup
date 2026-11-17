@@ -22,12 +22,10 @@ import { VAT_NOTE, plusWon, priceOf, won } from '../lib/price.js'
 import { useStore } from '../store/StoreContext.jsx'
 import './BuildPage.css'
 
+// 담은 뒤에는 메인으로 넘어가므로 '계속 꾸미기'(B02-8)는 두지 않음
 const CART_TOAST = {
   message: '장바구니에 담았어요.',
-  actions: [
-    { id: 'B02-7', label: '장바구니 보기', to: '/cart' },
-    { id: 'B02-8', label: '계속 꾸미기', close: true },
-  ],
+  actions: [{ id: 'B02-7', label: '장바구니 보기', to: '/cart' }],
 }
 const SAVE_TOAST = {
   message: '디자인을 저장했어요.',
@@ -41,7 +39,8 @@ function scrollToId(id) {
 
 // P02 보드 만들기
 export default function BuildPage() {
-  const { draft, updateDraft, addToCart, saveDesign, loggedIn, setPending, showToast, startBuyNow } = useStore()
+  const { draft, updateDraft, resetDraft, addToCart, saveDesign, loggedIn, setPending, showToast, startBuyNow } =
+    useStore()
   const price = priceOf(draft)
   const location = useLocation()
   const navigate = useNavigate()
@@ -169,8 +168,11 @@ export default function BuildPage() {
       navigate('/login')
       return
     }
+    // 담고 나면 만들던 보드를 처음 상태로 돌리고, 메인으로 부드럽게 넘어감
     addToCart(draft)
+    resetDraft()
     showToast(CART_TOAST)
+    navigate('/', { viewTransition: true })
   }
 
   // 주문하기(바로 결제): 장바구니에 담지 않고 지금 만든 보드만 주문·결제로 보냄

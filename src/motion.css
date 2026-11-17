@@ -155,7 +155,19 @@ textarea:focus-visible {
 }
 
 /* 동작 줄이기: 움직임을 모두 끄고 색 변화만 남김 */
+/* 장바구니 담기 → 메인: 페이지가 부드럽게 겹쳐 바뀜 (0.3초) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+
   *,
   *::before,
   *::after {

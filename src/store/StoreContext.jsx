@@ -81,11 +81,12 @@ export function StoreProvider({ children }) {
       // 주문하기(바로 결제): 장바구니에 담지 않고 이 보드만 결제
       startBuyNow: (design) => setState((s) => ({ ...s, buyNow: { id: newId(), design: { ...design }, qty: 1 } })),
       // now: 바로 결제였으면 장바구니는 그대로 두고 바로 결제 보드만 비움
+      // 결제를 마치면 만들던 보드도 처음 상태로 (다시 보드 만들기를 누르면 새로 시작)
       completeOrder: (order, { now = false } = {}) =>
         setState((s) =>
           now
-            ? { ...s, lastOrderCount: 1, lastOrder: order ?? null, buyNow: null }
-            : { ...s, lastOrderCount: cartCount(s.cart), lastOrder: order ?? null, cart: [] },
+            ? { ...s, lastOrderCount: 1, lastOrder: order ?? null, buyNow: null, draft: DEFAULT_DESIGN }
+            : { ...s, lastOrderCount: cartCount(s.cart), lastOrder: order ?? null, cart: [], draft: DEFAULT_DESIGN },
         ),
       addReview: (review) => setState((s) => ({ ...s, myReviews: [{ id: newId(), ...review }, ...s.myReviews] })),
       removeReview: (id) => setState((s) => ({ ...s, myReviews: s.myReviews.filter((r) => r.id !== id) })),
