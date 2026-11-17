@@ -17,8 +17,8 @@ import {
   SHOE_SIZES,
   STYLES,
 } from '../data/options.js'
-import { HEX_RE, deckHexOf, describe, eunNeun, partHexOf, recommend } from '../lib/design.js'
-import { plusWon, priceOf, won } from '../lib/price.js'
+import { HEX_RE, deckHexOf, describe, eunNeun, hasBannedWord, partHexOf, recommend } from '../lib/design.js'
+import { VAT_NOTE, plusWon, priceOf, won } from '../lib/price.js'
 import { useStore } from '../store/StoreContext.jsx'
 import './BuildPage.css'
 
@@ -71,6 +71,21 @@ export default function BuildPage() {
   }
 
   const imageBtnRef = useRef(null)
+  // 덱 문구: 입력 중인 글자는 따로 두고, 넣을 수 없는 낱말이 있으면 미리보기·담기에 쓰지 않음
+  const [phraseText, setPhraseText] = useState(draft.phrase)
+  const phraseBanned = hasBannedWord(phraseText)
+  const onPhrase = (raw) => {
+    const v = raw.slice(0, PHRASE_MAX)
+    setPhraseText(v)
+    updateDraft({ phrase: hasBannedWord(v) ? '' : v })
+  }
+  // 넣을 수 없는 문구가 남아 있으면 담기·주문·저장 전에 문구 칸으로 보냄
+  const phraseBlocked = () => {
+    if (!phraseBanned) return false
+    setPart('deck')
+    requestAnimationFrame(() => document.getElementById('phrase')?.focus())
+    return true
+  }
   // 주문하기(바로 결제): 로그인하지 않았으면 이 자리에서 로그인 창을 띄움
   const [buyLoginOpen, setBuyLoginOpen] = useState(false)
   const buyBtnRef = useRef(null)
@@ -148,6 +163,7 @@ export default function BuildPage() {
 
   // 장바구니 담기도 로그인이 필요 (로그인 후 돌아와서 이어서 담음)
   const onAddCart = () => {
+    if (phraseBlocked()) return
     if (!loggedIn) {
       setPending('cart')
       navigate('/login')
@@ -164,6 +180,7 @@ export default function BuildPage() {
   }
 
   const onBuyNow = () => {
+    if (phraseBlocked()) return
     if (!loggedIn) {
       setBuyLoginOpen(true)
       return
@@ -177,6 +194,7 @@ export default function BuildPage() {
   }, [])
 
   const onSave = () => {
+    if (phraseBlocked()) return
     if (!loggedIn) {
       setPending('save')
       navigate('/login')
@@ -187,6 +205,7 @@ export default function BuildPage() {
   }
 
   const onImage = () => {
+    if (phraseBlocked()) return
     if (!loggedIn) {
       setPending('image')
       navigate('/login')
@@ -314,7 +333,7 @@ export default function BuildPage() {
                   {`키 ${rec.height}cm · 신발 ${rec.shoe}mm 기준으로는 ${rec.base}인치예요.`}
                   {rec.style && rec.length !== rec.base && ` ${eunNeun(rec.style.name)} ${rec.style.why} 추천했어요.`}
                 </p>
-                <p className="rec-box__note">추천은 확인용 예시 규칙이에요. 아래에서 다른 길이를 골라도 돼요.</p>
+                <p className="rec-box__note">아래에서 다른 길이를 골라도 돼요.</p>
               </div>
             )}
           </div>
@@ -552,16 +571,23 @@ export default function BuildPage() {
                       <input
                         id="phrase"
                         type="text"
-                        className="input"
+                        className={`input${phraseBanned ? ' is-error' : ''}`}
                         maxLength={PHRASE_MAX}
-                        value={draft.phrase}
+                        value={phraseText}
                         placeholder="덱에 넣을 문구를 입력해 주세요 · 예: MY RIDE"
-                        aria-describedby="phrase-help"
-                        onChange={(e) => updateDraft({ phrase: e.target.value.slice(0, PHRASE_MAX) })}
+                        aria-invalid={phraseBanned ? 'true' : undefined}
+                        aria-describedby={phraseBanned ? 'phrase-err phrase-help' : 'phrase-help'}
+                        onChange={(e) => onPhrase(e.target.value)}
                       />
+                      {phraseBanned && (
+                        <p id="phrase-err" className="field-error">
+                          <Alert />
+                          넣을 수 없는 낱말이 있어요. 다른 문구로 바꿔 주세요.
+                        </p>
+                      )}
                       <p id="phrase-help" className="small-help">
                         <strong>
-                          {draft.phrase.length}/{PHRASE_MAX}자
+                          {phraseText.length}/{PHRASE_MAX}자
                         </strong>{' '}
                         · 입력한 문구는 미리보기에 바로 보여요. 문구 없이 무늬만 골라도 돼요.
                       </p>
@@ -638,7 +664,7 @@ export default function BuildPage() {
               ))}
             </dl>
             <p className="price__amount" aria-live="polite">
-              합계 {won(price.total)}
+              합계 {won(price.total)} <span className="price__vat">{VAT_NOTE}</span>
             </p>
           </div>
           <div className="price__actions">

@@ -5,6 +5,7 @@ import './index.css'
 import App from './App.jsx'
 import './features.css'
 import './mobile.css'
+import './motion.css'
 import { StoreProvider } from './store/StoreContext.jsx'
 
 createRoot(document.getElementById('root')).render(

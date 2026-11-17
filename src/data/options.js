@@ -191,3 +191,9 @@ export const EXTRAS = [
   { id: 'grip', name: '그립테이프', desc: '덱 윗면에 붙이는 여분·교체용 미끄럼 방지 테이프예요.', price: 6000, img: imgGrip },
   { id: 'bag', name: '보드 가방', desc: '보드를 넣고 메고 다니기 편해요.', price: 18000, img: imgBag },
 ]
+
+// 장바구니 수량 (보드마다 1~5개, 2026-11-17 결정)
+export const QTY_MAX = 5
+
+// 배송 안내 (2026-11-17 결정: 전 상품 무료배송, 제주·도서산간 추가 비용 없음)
+export const SHIPPING_NOTE = '무료배송 · 주문 후 제작 5일 + 배송 1~2일'

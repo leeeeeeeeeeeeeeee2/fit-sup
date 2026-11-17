@@ -10,10 +10,11 @@ import MainPage from './pages/MainPage.jsx'
 import MyDesignsPage from './pages/MyDesignsPage.jsx'
 import OrderCompletePage from './pages/OrderCompletePage.jsx'
 import ReviewsPage from './pages/ReviewsPage.jsx'
+import PolicyPage from './pages/PolicyPage.jsx'
 import ScrollToTop from './components/ScrollToTop.jsx'
 
 // 페이지 주소
-// P01 /  · P02 /build  · P03 /cart  · P04 /checkout (완료 /checkout/complete)  · P05 /my-designs  · P06 /login  · P07 /reviews
+// P01 /  · P02 /build  · P03 /cart  · P04 /checkout (완료 /checkout/complete)  · P05 /my-designs  · P06 /login  · P07 /reviews  · P08 /terms  · P09 /privacy
 function App() {
   return (
     <>
@@ -28,6 +29,8 @@ function App() {
         <Route path="/my-designs" element={<MyDesignsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/reviews" element={<ReviewsPage />} />
+        <Route path="/terms" element={<PolicyPage key="terms" kind="terms" />} />
+        <Route path="/privacy" element={<PolicyPage key="privacy" kind="privacy" />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Footer />

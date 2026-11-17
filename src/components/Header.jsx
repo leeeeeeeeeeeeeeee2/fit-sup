@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
+import { cartCount } from '../lib/price.js'
 import { useStore } from '../store/StoreContext.jsx'
 import { Logo } from './Icons.jsx'
 // 모바일·태블릿(1023px 이하) 아이콘 메뉴용 — 데스크톱에서는 .m-only로 숨김
@@ -8,7 +10,14 @@ import { Bookmark, Cart, LogOut, Pencil, StarLine, User } from './Icons.jsx'
 export default function Header() {
   const { cart, loggedIn, logout } = useStore()
   const { pathname } = useLocation()
-  const count = cart.length
+  const count = cartCount(cart)
+  // 개수가 바뀔 때마다 배지를 한 번 튀어 오르게 함 (처음 열 때는 그대로)
+  const [last, setLast] = useState(count)
+  const [bump, setBump] = useState(0)
+  if (last !== count) {
+    setLast(count)
+    setBump(bump + 1)
+  }
 
   return (
     <header data-id="header" className="site-header">
@@ -45,7 +54,7 @@ export default function Header() {
               >
                 <span className="m-only gnb__icon" aria-hidden="true"><Cart /></span>
                 장바구니
-                <span className="badge" aria-hidden="true">
+                <span key={bump} className={`badge${bump ? ' badge--bump' : ''}`} aria-hidden="true">
                   {count}
                 </span>
               </NavLink>
@@ -70,6 +79,10 @@ export default function Header() {
             </li>
           </ul>
         </nav>
+        {/* 화면 읽기 프로그램에 장바구니 개수 변화를 알림 */}
+        <p className="sr-only" role="status" aria-live="polite">
+          {bump ? `장바구니에 담은 보드 ${count}개` : ''}
+        </p>
       </div>
     </header>
   )

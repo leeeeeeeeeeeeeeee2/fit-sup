@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Alert, Pencil, Star, ThumbUp } from '../components/Icons.jsx'
+import { Alert, Pencil, Star, ThumbUp, Trash } from '../components/Icons.jsx'
 import { LENGTHS, STYLES } from '../data/options.js'
 import { REVIEW_FILTERS, REVIEW_PHOTOS, REVIEW_SORTS, REVIEW_SUMMARY, REVIEWS } from '../data/reviews.js'
 import { readPhoto } from '../lib/photo.js'
@@ -229,7 +229,9 @@ function WriteReview({ onSubmit, onClose }) {
 
 // P07 리뷰
 export default function ReviewsPage() {
-  const { loggedIn, setPending, myReviews, addReview, helped, toggleHelped, showToast } = useStore()
+  const { loggedIn, setPending, myReviews, addReview, removeReview, helped, toggleHelped, showToast } = useStore()
+  // 삭제 확인 중인 내 리뷰 id (한 번 더 눌러야 지워짐)
+  const [confirmId, setConfirmId] = useState(null)
   const location = useLocation()
   const navigate = useNavigate()
   const [filter, setFilter] = useState('all')
@@ -406,15 +408,42 @@ export default function ReviewsPage() {
                       <img src={r.photo} alt="" loading="lazy" />
                     </button>
                   )}
-                  <button
-                    type="button"
-                    aria-pressed={on}
-                    className={`review-item__help${on ? ' is-on' : ''}`}
-                    onClick={() => toggleHelped(r.id)}
-                  >
-                    <ThumbUp size={16} />
-                    도움돼요 {num(r.helpfulCount)}
-                  </button>
+                  <div className="review-item__actions">
+                    <button
+                      type="button"
+                      aria-pressed={on}
+                      className={`review-item__help${on ? ' is-on' : ''}`}
+                      onClick={() => toggleHelped(r.id)}
+                    >
+                      <ThumbUp size={16} />
+                      도움돼요 {num(r.helpfulCount)}
+                    </button>
+                    {r.mine &&
+                      (confirmId === r.id ? (
+                        <span className="review-item__confirm">
+                          이 리뷰를 지울까요?
+                          <button
+                            type="button"
+                            className="review-item__del is-danger"
+                            onClick={() => {
+                              removeReview(r.id)
+                              setConfirmId(null)
+                              showToast({ message: '리뷰를 지웠어요.' })
+                            }}
+                          >
+                            지우기
+                          </button>
+                          <button type="button" className="review-item__del" onClick={() => setConfirmId(null)}>
+                            취소
+                          </button>
+                        </span>
+                      ) : (
+                        <button type="button" className="review-item__del" onClick={() => setConfirmId(r.id)}>
+                          <Trash size={16} />
+                          삭제
+                        </button>
+                      ))}
+                  </div>
                 </li>
               )
             })}

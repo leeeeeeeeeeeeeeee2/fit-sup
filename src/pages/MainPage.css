@@ -202,3 +202,139 @@
   font-size: 15px;
   line-height: 1.7;
 }
+
+/* S01-5 보드 품질·길이 가이드 */
+.quality-grid {
+  margin: 56px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: 24px;
+}
+
+.quality-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--ground);
+  border-radius: var(--radius-card);
+  padding: 20px 20px 28px;
+}
+
+.quality-card__img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  background: var(--placeholder);
+}
+
+.quality-card__no {
+  margin-top: 18px;
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 1;
+}
+
+.quality-card__title {
+  margin-top: 12px;
+  font-size: 22px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.quality-card__strong {
+  margin-top: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.quality-card__desc {
+  margin-top: 6px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-muted);
+}
+
+.length-guide {
+  margin-top: 56px;
+}
+
+.length-guide__title {
+  font-size: 22px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.length-guide__table {
+  margin-top: 16px;
+  overflow-x: auto;
+  border: var(--border-line) solid var(--ink);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.length-guide__table table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+.length-guide__table th,
+.length-guide__table td {
+  padding: 14px 20px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.length-guide__table thead th {
+  background: var(--ground);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.length-guide__table tbody tr:last-child th,
+.length-guide__table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.length-guide__len {
+  display: inline-flex;
+  padding: 4px 14px;
+  border: var(--border-line) solid var(--ink);
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.length-guide__note {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.length-guide__note a {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.spec-note {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  padding: 12px 16px;
+  border: 1.5px dashed var(--line-soft);
+  border-radius: var(--radius-lg);
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.spec-note strong {
+  color: var(--ink);
+}

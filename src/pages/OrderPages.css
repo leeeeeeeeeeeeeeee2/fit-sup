@@ -446,3 +446,45 @@
   flex: none;
   color: var(--brand);
 }
+
+/* P08·P09 체험용 약관 */
+.policy__chip {
+  margin-top: 16px;
+}
+
+.policy__body {
+  margin-top: 24px;
+  max-width: 820px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.policy__sec h2 {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.policy__sec p {
+  margin-top: 8px;
+  max-width: 68ch;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text-muted);
+}
+
+.policy__links {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.policy__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ink);
+  font-weight: 700;
+}

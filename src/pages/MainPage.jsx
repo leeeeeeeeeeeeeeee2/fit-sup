@@ -1,7 +1,12 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { HeroBoard } from '../components/Board.jsx'
 import { ArrowRight } from '../components/Icons.jsx'
 import { STYLES } from '../data/options.js'
+// S01-5 품질 카드 사진 (Figma 이미지 자리에 가장 가까운 사진)
+import imgDeck from '../assets/reviews/black-skateboard.jpg'
+import imgRide from '../assets/reviews/person-riding.jpg'
+import imgCare from '../assets/products/t-tool.jpg'
 import './MainPage.css'
 
 // 히어로 영상: src/assets/main/hero.mp4 (또는 .webm/.mov)를 넣으면 보드 그림 대신 재생
@@ -19,10 +24,76 @@ const FLOW = [
   { no: '03', title: '주문하기', desc: '장바구니에 담아 주문까지.' },
 ]
 
-const CHECKS = ['보드 소재', '제작·배송 기간', '교환·반품 기준']
+// S01-4 구매 전 확인 — 체험용 예시 정책 (2026-11-17 결정)
+const CHECKS = [
+  { title: '보드 소재', desc: '캐나다 메이플 7겹 덱 · PU 바퀴' },
+  { title: '제작·배송 기간', desc: '주문 후 제작 5일 + 배송 1~2일 · 무료배송' },
+  { title: '교환·반품 기준', desc: '맞춤 제작이라 단순 변심 반품은 어려워요. 불량은 7일 안에 무료 교환' },
+]
+
+// S01-5 보드 품질·길이 가이드 (출처: Figma 와이어프레임 P01 › S01-5)
+const QUALITY = [
+  {
+    no: '01',
+    title: '덱 내구성',
+    strong: '몸을 지탱하는 덱, 소재와 구조부터',
+    desc: '덱 소재·적층 구조·권장 하중을 확인해요. 몸무게와 사용 환경에 맞는 선택이 중요해요.',
+    img: imgDeck,
+    alt: '자갈길 위에 놓인 보드의 덱',
+  },
+  {
+    no: '02',
+    title: '주행 안정감',
+    strong: '덱·트럭·바퀴의 조합을 함께',
+    desc: '덱 길이와 발판 너비, 트럭의 움직임이 균형과 코너링에 어떤 영향을 주는지 살펴봐요.',
+    img: imgRide,
+    alt: '균형 잡힌 자세로 보드를 타는 모습',
+  },
+  {
+    no: '03',
+    title: '관리와 점검',
+    strong: '오래 타기 위한 작은 습관',
+    desc: '타기 전 나사 풀림과 덱의 균열을 확인해요. 물기를 닦고 건조한 곳에 보관해 주세요.',
+    img: imgCare,
+    alt: '바퀴 나사를 조이는 스케이트 T툴',
+  },
+]
+
+const LENGTH_GUIDE = [
+  { len: 22, feature: '작고 가벼워 휴대하기 좋아요', for: '짧은 거리 이동 · 휴대성 중심' },
+  { len: 27, feature: '휴대성과 안정성의 균형을 잡아요', for: '일상 이동 · 균형 있는 선택' },
+  { len: 32, feature: '넓은 발판으로 편안하게 타요', for: '입문 · 안정감 중심' },
+]
 
 // P01 메인
 export default function MainPage() {
+  // 카드 묶음이 화면에 들어오면 차례로 떠오르게 함 (데스크톱, 동작 줄이기 꺼짐일 때만)
+  useEffect(() => {
+    const ok =
+      'IntersectionObserver' in window &&
+      window.matchMedia('(min-width: 1024px)').matches &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!ok) return undefined
+    const root = document.documentElement
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-in')
+            io.unobserve(e.target)
+          }
+        }
+      },
+      { threshold: 0.15 },
+    )
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el))
+    root.classList.add('reveal-on')
+    return () => {
+      io.disconnect()
+      root.classList.remove('reveal-on')
+    }
+  }, [])
+
   return (
     <div data-id="P01" className="page page--main">
       <section data-id="S01-1" aria-labelledby="hero-title" className="hero container">
@@ -67,7 +138,7 @@ export default function MainPage() {
             어떻게 탈래?
           </h2>
           <p className="section__desc">타는 스타일에 따라 맞는 길이가 달라져요. 스타일을 누르면 바로 보드 만들기로 이어져요.</p>
-          <div className="style-grid">
+          <div className="style-grid reveal">
             {STYLES.map((s) => (
               <article key={s.id} className="style-card">
                 <img className="style-card__img" src={s.img} alt={`${s.name} 라이딩 장면`} />
@@ -95,7 +166,7 @@ export default function MainPage() {
           세 단계면 끝
         </h2>
         <p className="section__desc">스타일과 길이 → 디자인 → 구매. 중간에 저장해 두고 나중에 이어서 꾸며도 돼요.</p>
-        <ol className="flow-grid">
+        <ol className="flow-grid reveal">
           {FLOW.map((f) => (
             <li key={f.no} className="flow-card">
               <span aria-hidden="true" className="flow-card__no">
@@ -108,20 +179,77 @@ export default function MainPage() {
         </ol>
       </section>
 
+      <section data-id="S01-5" aria-labelledby="guide-title" className="band band--surface">
+        <div className="container section">
+          <h2 id="guide-title" className="section__title">
+            디자인만큼, 보드의 기본도 꼼꼼하게
+          </h2>
+          <p className="section__desc">오래 탈 수 있는지, 편안하게 탈 수 있는지. 보드를 고르기 전에 함께 살펴봐요.</p>
+          <ul className="quality-grid reveal">
+            {QUALITY.map((q) => (
+              <li key={q.no} className="quality-card">
+                <img className="quality-card__img" src={q.img} alt={q.alt} loading="lazy" />
+                <span aria-hidden="true" className="quality-card__no">
+                  {q.no}
+                </span>
+                <h3 className="quality-card__title">{q.title}</h3>
+                <p className="quality-card__strong">{q.strong}</p>
+                <p className="quality-card__desc">{q.desc}</p>
+              </li>
+            ))}
+          </ul>
+
+          <div className="length-guide">
+            <h3 className="length-guide__title">나에게 맞는 길이, 한눈에 비교해요</h3>
+            <div className="length-guide__table">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">길이</th>
+                    <th scope="col">주요 특징</th>
+                    <th scope="col">이런 분께 추천해요</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {LENGTH_GUIDE.map((g) => (
+                    <tr key={g.len}>
+                      <th scope="row">
+                        <span className={`length-guide__len length-guide__len--${g.len}`}>{g.len}인치</span>
+                      </th>
+                      <td>{g.feature}</td>
+                      <td>{g.for}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="length-guide__note">
+              ※ 키·신발 사이즈와 타는 스타일을 함께 고려해요. <Link to="/build#S02-2">보드 만들기</Link>에서 길이를 추천받을 수 있어요.
+            </p>
+          </div>
+
+          <p className="spec-note">
+            <strong>상세 사양 안내 예정</strong>
+            소재·적층 수·최대 하중·내구성 시험 결과·품질 보증은 확인 후 안내해요.
+          </p>
+        </div>
+      </section>
+
       <section data-id="S01-4" aria-labelledby="check-title" className="band band--brand">
         <div className="container check">
           <h2 id="check-title" className="check__title">
             구매 전 확인
           </h2>
-          <p className="check__desc">보드 소재, 제작·배송 기간, 교환·반품 기준은 판매 정책이 확정되면 이곳에 안내해요.</p>
+          <p className="check__desc">주문하기 전에 보드 소재, 제작·배송 기간, 교환·반품 기준을 확인해 주세요.</p>
           <ul className="check-grid">
             {CHECKS.map((c) => (
-              <li key={c} className="check-box">
-                <h3>{c}</h3>
-                <p>판매 정책 확정 후 안내</p>
+              <li key={c.title} className="check-box">
+                <h3>{c.title}</h3>
+                <p>{c.desc}</p>
               </li>
             ))}
           </ul>
+          <p className="check__note">체험용 사이트의 예시 정책이에요.</p>
         </div>
       </section>
     </div>

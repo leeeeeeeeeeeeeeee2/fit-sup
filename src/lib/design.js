@@ -105,3 +105,15 @@ export function eunNeun(word) {
   if (code < 0 || code > 11171) return `${word}는`
   return code % 28 ? `${word}은` : `${word}는`
 }
+
+// 덱 문구에 넣을 수 없는 낱말 (욕설·비하) — 띄어쓰기·기호를 빼고 비교
+const BANNED_WORDS = [
+  '시발', '씨발', '씨빨', 'ㅅㅂ', 'ㅆㅂ', '병신', 'ㅂㅅ', '개새끼', '새끼', '좆', '존나', 'ㅈㄴ', '지랄', '염병', '미친놈', '미친년',
+  '닥쳐', '꺼져', '엠창', '느금', '애미', '애비', '창녀', '걸레', '장애인새끼', '한남', '김치녀', '틀딱', '급식충',
+  'fuck', 'shit', 'bitch', 'asshole', 'dick', 'pussy', 'cunt', 'nigger', 'nigga', 'faggot', 'retard', 'slut', 'whore',
+]
+
+export function hasBannedWord(text) {
+  const t = (text ?? '').toLowerCase().replace(/[\s\p{P}\p{S}0-9_]/gu, '')
+  return BANNED_WORDS.some((w) => t.includes(w))
+}

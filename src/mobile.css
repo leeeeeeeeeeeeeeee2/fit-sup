@@ -137,10 +137,7 @@
     align-items: stretch;
   }
 
-  /* 43 · 약관 링크: 페이지가 정해질 때까지 숨기기 */
-  html .site-footer__policy-links {
-    display: none;
-  }
+  /* 43 · 약관 링크: 체험용 약관 페이지가 생겨 다시 보임 (2026-11-17) */
 
   /* 43 · 푸터 메뉴 삭제: 데스크톱 포함으로 바뀌어 features.css에서 처리 */
 
@@ -257,5 +254,61 @@
   html .swatch__dot {
     width: 34px;
     height: 34px;
+  }
+}
+
+/* 2026-11-17 점검: 11-16 이후 생긴 화면의 360px 넘침 고치기 */
+.input {
+  min-width: 0;
+}
+
+.field {
+  min-width: 0;
+}
+
+/* P04 배송 정보: 칸 최소 폭 320px 때문에 좁은 화면에서 넘침 → 1열 */
+.ship-box__row {
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+}
+
+/* P02 바퀴 색 직접 입력 */
+.wheel-color__hex {
+  flex-basis: min(260px, 100%);
+  min-width: 0;
+}
+
+.hex__field {
+  min-width: 0;
+}
+
+.hex__field input {
+  min-width: 0;
+  width: 100%;
+}
+
+/* 창(로그인·회원가입 등)은 화면 폭을 넘지 않게 */
+.dialog {
+  min-width: 0;
+}
+
+@media (max-width: 599px) {
+  .dialog {
+    padding: 24px 20px;
+  }
+
+  /* P07 리뷰: 필터는 가로 스크롤 상자 안에서만 넘치고, 정렬은 한 줄 */
+  .review-tools,
+  .review-filters {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .review-sort {
+    flex-wrap: wrap;
+  }
+
+  /* P04 결제 수단 버튼은 세로로 */
+  .pay-methods {
+    flex-direction: column;
   }
 }

@@ -791,3 +791,162 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* 화면에는 보이지 않고 화면 읽기 프로그램만 읽는 글 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* S01-4 예시 정책 표시 */
+.check__note {
+  margin-top: 10px;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* P03 장바구니 수량 (1~5개) */
+.qty {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  border: var(--border-line) solid var(--ink);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+}
+
+.qty__btn {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.qty__btn:disabled {
+  color: var(--line-soft);
+  cursor: default;
+}
+
+.qty__num {
+  min-width: 28px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.board-row__price {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.board-row__unit {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+/* 부가세·배송 안내 */
+.price__vat {
+  font-family: var(--font-sans);
+  font-size: 0.55em;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.summary-box__text > .summary-box__ship {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* P04 결제 버튼 + 체험용 안내 */
+.summary-box__pay {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.pay-notice {
+  max-width: 300px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+@media (max-width: 1023px) {
+  .summary-box__pay {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .pay-notice {
+    max-width: none;
+    text-align: left;
+  }
+}
+
+/* 로그인 창: 회원가입 전환·안내·동의 */
+.login-dialog__switch {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.login-dialog__switch .btn-text {
+  min-height: 44px;
+  padding: 0 4px;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.login-dialog__hint {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.login-dialog__agree {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.login-dialog__agree input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--ink);
+}
+
+.login-dialog__agree a {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.login-dialog {
+  max-height: calc(100% - 16px);
+  overflow-y: auto;
+}

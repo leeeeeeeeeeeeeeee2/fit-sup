@@ -24,14 +24,12 @@ export default function Footer() {
         <div className="site-footer__line" />
         <div className="site-footer__bottom">
           <div className="site-footer__policy">
-            {/* 이용약관·개인정보처리방침 페이지는 [미정] */}
+            {/* 체험용 약관 페이지 (2026-11-17 결정) */}
             <div className="site-footer__policy-links">
-              <a href="#">이용약관</a>
-              <a href="#">개인정보처리방침</a>
+              <Link to="/terms">이용약관</Link>
+              <Link to="/privacy">개인정보처리방침</Link>
             </div>
-            <p className="site-footer__biz">
-              상호 · 대표자 · 사업자등록번호 · 통신판매업 신고번호 · 주소 · 고객센터는 판매 정책이 확정되면 이곳에 표시해요.
-            </p>
+            <p className="site-footer__biz">포트폴리오용 체험 사이트예요. 실제 판매는 하지 않아요.</p>
           </div>
           <p className="site-footer__copy">© FIT'SUP</p>
         </div>

@@ -3,7 +3,8 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import BoardListItem from '../components/BoardListItem.jsx'
 import LoginModal from '../components/LoginModal.jsx'
 import { Alert } from '../components/Icons.jsx'
-import { cartTotal, won } from '../lib/price.js'
+import { SHIPPING_NOTE } from '../data/options.js'
+import { VAT_NOTE, cartCount, cartTotal, won } from '../lib/price.js'
 import { useStore } from '../store/StoreContext.jsx'
 import './OrderPages.css'
 
@@ -96,7 +97,7 @@ export default function CheckoutPage() {
   // 로그인한 뒤에는 완료 창을 닫을 때까지 띄워 둠
   const [loginDone, setLoginDone] = useState(false)
   const loginOpen = !loggedIn || loginDone
-  const n = items.length
+  const n = cartCount(items)
   const total = cartTotal(items)
 
   if (!n && !paid) return <Navigate to="/cart" replace />
@@ -131,7 +132,7 @@ export default function CheckoutPage() {
           </h2>
           <ul className="board-list">
             {items.map((it) => (
-              <BoardListItem key={it.id} design={it.design} />
+              <BoardListItem key={it.id} item={it} />
             ))}
           </ul>
         </section>
@@ -280,12 +281,16 @@ export default function CheckoutPage() {
               결제 금액
             </h2>
             <p className="summary-box__strong">
-              주문 상품 {n}개 · 합계 {won(total)}
+              주문 상품 {n}개 · 합계 {won(total)} {VAT_NOTE}
             </p>
+            <p className="summary-box__ship">배송비 0원 · {SHIPPING_NOTE}</p>
           </div>
-          <button data-id="B04-1" type="button" className="btn btn--primary" onClick={onPay}>
-            {won(total)} 결제하기
-          </button>
+          <div className="summary-box__pay">
+            <button data-id="B04-1" type="button" className="btn btn--primary" onClick={onPay}>
+              {won(total)} 결제하기
+            </button>
+            <p className="pay-notice">체험용 사이트라 실제로 결제되지 않아요. 실제 카드 정보는 넣지 마세요.</p>
+          </div>
         </section>
       </main>
       {loginOpen && !paid && (

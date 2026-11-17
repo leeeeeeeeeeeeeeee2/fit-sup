@@ -1,5 +1,8 @@
 import { DECK_OPTIONS, DESIGN_PRICES, EXTRAS, LENGTHS, WHEEL_TYPES } from '../data/options.js'
 
+// 표시 금액은 모두 부가세 포함 가격 (2026-11-17 결정)
+export const VAT_NOTE = '(부가세 포함)'
+
 export function won(n) {
   return `${n.toLocaleString('ko-KR')}원`
 }
@@ -36,6 +39,20 @@ export function priceOf(d) {
   return { lines, total: lines.reduce((sum, l) => sum + l.amount, 0) }
 }
 
+// 장바구니 한 줄의 수량 (예전에 담은 보드는 수량이 없어 1개)
+export function qtyOf(item) {
+  return item.qty ?? 1
+}
+
+export function lineTotal(item) {
+  return priceOf(item.design).total * qtyOf(item)
+}
+
 export function cartTotal(cart) {
-  return cart.reduce((sum, it) => sum + priceOf(it.design).total, 0)
+  return cart.reduce((sum, it) => sum + lineTotal(it), 0)
+}
+
+// 담은 보드 수 (수량 포함)
+export function cartCount(cart) {
+  return cart.reduce((n, it) => n + qtyOf(it), 0)
 }

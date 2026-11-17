@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { won } from '../lib/price.js'
+import { SHIPPING_NOTE } from '../data/options.js'
+import { VAT_NOTE, won } from '../lib/price.js'
 import { useStore } from '../store/StoreContext.jsx'
 import './OrderPages.css'
 
@@ -39,11 +40,17 @@ export default function OrderCompletePage() {
             <dl className="paid-box">
               <div>
                 <dt>결제 금액</dt>
-                <dd>{won(lastOrder.total)}</dd>
+                <dd>
+                  {won(lastOrder.total)} {VAT_NOTE}
+                </dd>
               </div>
               <div>
                 <dt>결제 수단</dt>
                 <dd>{lastOrder.payLabel}</dd>
+              </div>
+              <div>
+                <dt>배송</dt>
+                <dd>{SHIPPING_NOTE}</dd>
               </div>
             </dl>
           )}
@@ -53,6 +60,9 @@ export default function OrderCompletePage() {
             </a>
             <Link data-id="B04-3" to="/" className="btn btn--md">
               메인으로
+            </Link>
+            <Link data-id="B04-4" to="/reviews" className="btn btn--md">
+              리뷰 보러 가기
             </Link>
           </div>
         </section>

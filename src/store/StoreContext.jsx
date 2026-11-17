@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { DEFAULT_DESIGN } from '../data/options.js'
+import { DEFAULT_DESIGN, QTY_MAX } from '../data/options.js'
 import { normalizeDesign } from '../lib/design.js'
+import { cartCount } from '../lib/price.js'
 
 // 장바구니·로그인 상태·저장한 디자인·만들던 디자인을 브라우저(localStorage)에 보관
 const STORAGE_KEY = 'fitsup'
@@ -70,18 +71,24 @@ export function StoreProvider({ children }) {
       setDraft: (design) => setState((s) => ({ ...s, draft: normalizeDesign(design) })),
       resetDraft: () => setState((s) => ({ ...s, draft: DEFAULT_DESIGN })),
       addToCart: (design) =>
-        setState((s) => ({ ...s, cart: [...s.cart, { id: newId(), design: { ...design } }] })),
+        setState((s) => ({ ...s, cart: [...s.cart, { id: newId(), design: { ...design }, qty: 1 }] })),
+      setQty: (id, qty) =>
+        setState((s) => ({
+          ...s,
+          cart: s.cart.map((it) => (it.id === id ? { ...it, qty: Math.max(1, Math.min(QTY_MAX, qty)) } : it)),
+        })),
       removeFromCart: (id) => setState((s) => ({ ...s, cart: s.cart.filter((it) => it.id !== id) })),
       // 주문하기(바로 결제): 장바구니에 담지 않고 이 보드만 결제
-      startBuyNow: (design) => setState((s) => ({ ...s, buyNow: { id: newId(), design: { ...design } } })),
+      startBuyNow: (design) => setState((s) => ({ ...s, buyNow: { id: newId(), design: { ...design }, qty: 1 } })),
       // now: 바로 결제였으면 장바구니는 그대로 두고 바로 결제 보드만 비움
       completeOrder: (order, { now = false } = {}) =>
         setState((s) =>
           now
             ? { ...s, lastOrderCount: 1, lastOrder: order ?? null, buyNow: null }
-            : { ...s, lastOrderCount: s.cart.length, lastOrder: order ?? null, cart: [] },
+            : { ...s, lastOrderCount: cartCount(s.cart), lastOrder: order ?? null, cart: [] },
         ),
       addReview: (review) => setState((s) => ({ ...s, myReviews: [{ id: newId(), ...review }, ...s.myReviews] })),
+      removeReview: (id) => setState((s) => ({ ...s, myReviews: s.myReviews.filter((r) => r.id !== id) })),
       toggleHelped: (id) =>
         setState((s) => ({
           ...s,

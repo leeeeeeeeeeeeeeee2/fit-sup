@@ -3,16 +3,17 @@ import { Link, useNavigate } from 'react-router-dom'
 import BoardListItem from '../components/BoardListItem.jsx'
 import { ArrowRight } from '../components/Icons.jsx'
 import LoginModal from '../components/LoginModal.jsx'
-import { cartTotal, won } from '../lib/price.js'
+import { SHIPPING_NOTE } from '../data/options.js'
+import { VAT_NOTE, cartCount, cartTotal, won } from '../lib/price.js'
 import { useStore } from '../store/StoreContext.jsx'
 import './OrderPages.css'
 
 // P03 장바구니
 export default function CartPage() {
-  const { cart, removeFromCart, loggedIn } = useStore()
+  const { cart, removeFromCart, setQty, loggedIn } = useStore()
   const navigate = useNavigate()
   const [loginOpen, setLoginOpen] = useState(false)
-  const n = cart.length
+  const n = cartCount(cart)
 
   // 주문·결제는 로그인이 필요: 이 자리에서 로그인 창을 띄우고, 완료하면 주문·결제로 이어서 감
   const onOrder = (e) => {
@@ -33,7 +34,7 @@ export default function CartPage() {
           {n ? (
             <ul className="board-list">
               {cart.map((it) => (
-                <BoardListItem key={it.id} design={it.design} onRemove={() => removeFromCart(it.id)} />
+                <BoardListItem key={it.id} item={it} onQty={(q) => setQty(it.id, q)} onRemove={() => removeFromCart(it.id)} />
               ))}
             </ul>
           ) : (
@@ -49,8 +50,9 @@ export default function CartPage() {
               주문 요약
             </h2>
             <p>
-              주문 예정 보드 {n}개 · 상품 금액 합계 <strong>{won(cartTotal(cart))}</strong>
+              주문 예정 보드 {n}개 · 상품 금액 합계 <strong>{won(cartTotal(cart))}</strong> {VAT_NOTE}
             </p>
+            <p className="summary-box__ship">{SHIPPING_NOTE}</p>
           </div>
           {n ? (
             <Link data-id="B03-2" to="/checkout" className="btn btn--primary" onClick={onOrder}>
