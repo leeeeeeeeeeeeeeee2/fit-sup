@@ -4,13 +4,13 @@
 
 ## 1. 링크
 
-- **Live Demo**: (배포 URL 입력)
+- **Live Demo**: ( https://leeeeeeeeeeeeeeee2.github.io/fit-sup/)
 - **GitHub**: ((https://github.com/leeeeeeeeeeeeeeee2/figma-pratice))
-- **Figma 디자인**: (Figma URL 입력)
+- **Figma 디자인**: (https://www.figma.com/design/WHaklMHuz6g8ixDJ35u3Xa/FIT-SUP?node-id=15-438&t=m6EJ1ln0RphwLLIV-1)
 
 ## 2. 프로젝트 정보
 
-- **제작 기간**: 2026.11.XX ~ 2026.11.XX (X일)
+- **제작 기간**: 2026.11.06 ~ 2026.11.12 (X일)
 - **담당 역할**: 개인 프로젝트 (기여도 100%)
 - **담당 범위**: 브랜드 콘셉트 기획 → Figma 디자인 → 바이브코딩 구현 → GitHub Pages 배포
 
